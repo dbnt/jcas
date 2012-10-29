@@ -370,7 +370,7 @@ public class RideGame extends TableGame implements CardConstants
 		// Handle the accounting for this deal.
 		//
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			Transaction trans = new Transaction ("deal");
 			trans.setWagerAmount (newAnte * 3);
@@ -434,7 +434,7 @@ public class RideGame extends TableGame implements CardConstants
 		// Handle the accounting.
 		//
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			Transaction trans = new Transaction (isWithdraw ? "withdraw"
 															: "let_it_ride");

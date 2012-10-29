@@ -697,7 +697,7 @@ public class BlackjackGame extends TableGame implements Constants
 		}
 
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			boolean closeRound = isDealOk ();
 

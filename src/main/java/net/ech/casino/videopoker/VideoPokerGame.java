@@ -389,7 +389,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 		}
 
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			Transaction trans = new Transaction ("deal");
 			trans.setWagerAmount (getBetMoney ());
@@ -440,7 +440,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 		}
 
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			Transaction trans = new Transaction ("draw");
 			if (getWin () > 0)
@@ -484,7 +484,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 		}
 
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			Transaction trans = new Transaction ("doubleup");
 			trans.setWagerAmount (getBetMoney ());
@@ -533,7 +533,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 		}
 
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			Transaction trans = new Transaction ("pick");
 			if (getWin () > 0)

@@ -487,7 +487,7 @@ public class CaribGame extends TableGame implements CaribConstants
 		// Handle the accounting for this deal.
 		//
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			// Two transactions -- one for the drop, one for the ante --
 			// packaged as one.
@@ -578,7 +578,7 @@ public class CaribGame extends TableGame implements CaribConstants
 		// Handle the accounting.
 		//
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			Transaction trans = new Transaction ("call");
 			trans.setWagerAmount (ante * 2);
@@ -619,7 +619,7 @@ public class CaribGame extends TableGame implements CaribConstants
 		// Handle the accounting.
 		//
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			session.executeTransaction (new Transaction ("fold"));
 		}

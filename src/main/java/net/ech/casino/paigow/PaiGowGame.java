@@ -372,7 +372,7 @@ public class PaiGowGame extends TableGame implements Constants
 		}
 
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			Transaction trans = new Transaction ("play");
 			trans.setWagerAmount (bet);
@@ -395,7 +395,7 @@ public class PaiGowGame extends TableGame implements Constants
 		}
 
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			session.executeTransaction (new Transaction ("houseway"));
 		}
@@ -478,7 +478,7 @@ public class PaiGowGame extends TableGame implements Constants
 		}
 
 		protected void transact (Session session)
-			throws AccountingException
+			throws CasinoException
 		{
 			Transaction trans = new Transaction ("resolve");
 			double totalReturn = getWin ();

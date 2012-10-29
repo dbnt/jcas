@@ -379,7 +379,7 @@ public abstract class Game implements java.io.Serializable
 			throws GameException {}
 		protected void computePlay () {}
 		protected void transact (Session session)
-			throws AccountingException {}
+			throws CasinoException {}
 		protected void saveState () {}
 		protected void restoreState () {}
 	}

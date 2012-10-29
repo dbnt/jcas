@@ -116,7 +116,7 @@ public abstract class Session implements java.io.Serializable
 	 *									accounting back end
 	 */
 	public abstract void executeTransaction (Transaction trans)
-		throws AccountingException;
+		throws CasinoException;
 
 	/**
 	 * Apply the latest jackpot amount to the Game's properties.
