@@ -122,12 +122,12 @@ public class WarGame extends TableGame implements Constants
 	private String checkPlayer (int seatIndex)
 		throws GameException
 	{
-		String playerId = getPlayer (seatIndex);
-		if (playerId == null)
+		Player player = getPlayer (seatIndex);
+		if (player == null)
 		{
 			throw new GameException ("No player in seat " + seatIndex, this);
 		}
-		return playerId;
+		return player.getAccountId();
 	}
 
 	//=======================================================================
@@ -165,7 +165,7 @@ public class WarGame extends TableGame implements Constants
 		// Everyone ante'd up?
 		for (int i = 0; i < model.getSeatCount(); ++i)
 		{
-			if (getPlayerAt(i) != null && model.getSeat(i).getAnte() == null)
+			if (getPlayer(i) != null && model.getSeat(i).getAnte() == null)
 			{
 				return false;
 			}
@@ -190,7 +190,7 @@ public class WarGame extends TableGame implements Constants
 				// Player wins initial deal.
 				model.showTake (i, seat.getAnte().getAmount().multiply (2));
 				trans.addRefund ("ante", seat.getAnte());
-				trans.addWin ("ante", getPlayerAt(i), seat.getAnte());
+				trans.addWin ("ante", getPlayer(i).getAccountId(), seat.getAnte());
 			}
 		}
 	}
@@ -212,7 +212,7 @@ public class WarGame extends TableGame implements Constants
 					model.showTake (i, 
 						tieBet.getAmount().multiply (TIE_PAYOUT_MULTIPLE + 1));
 					trans.addRefund ("tie", tieBet);
-					trans.addWin ("tie", getPlayerAt(i),
+					trans.addWin ("tie", getPlayer(i).getAccountId(),
 						tieBet.getPurse(),
 						tieBet.getAmount().multiply (TIE_PAYOUT_MULTIPLE));
 				}
@@ -233,7 +233,7 @@ public class WarGame extends TableGame implements Constants
 
 		for (int i = 0; i < model.getSeatCount(); ++i)
 		{
-			if (getPlayerAt (i) != null && model.isTieAt (i))
+			if (getPlayer (i) != null && model.isTieAt (i))
 			{
 				nTies += 1;
 				if (model.getSeat(i).getRaise() != null)
@@ -283,7 +283,7 @@ public class WarGame extends TableGame implements Constants
 				// If player won, account for the winnings.
 				if (take != null)
 				{
-					String playerId = getPlayerAt (i);
+					String playerId = getPlayer (i).getAccountId();
 					trans.addRefund ("ante", ante);
 					trans.addRefund ("raise", ante);
 					trans.addWin ("raise", playerId, seat.getRaise().getPurse(), seat.getRaise().getAmount().multiply (payout - 2));
@@ -318,11 +318,8 @@ public class WarGame extends TableGame implements Constants
 			// Pending model becomes the real model, temporarily.
 			this.table = model;
 
-			// TEMPORARY GROSSNESS:
-			Session session = getSessionFor(playerAt(0));
-
 			// Take it to the accounting system.
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 		catch (Exception e)
 		{
@@ -344,12 +341,5 @@ public class WarGame extends TableGame implements Constants
 	{
 		super.removePlayerAt (seatIndex);
 		table.clearPlayerBets (seatIndex);
-	}
-
-	// TEMPORARY
-	private String getPlayerAt (int seatIndex)
-	{
-		Player p = playerAt(seatIndex);
-		return p == null ? null : p.getAccountId();
 	}
 }

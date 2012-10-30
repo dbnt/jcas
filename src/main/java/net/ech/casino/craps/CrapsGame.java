@@ -213,8 +213,6 @@ public class CrapsGame extends TableGame implements Constants
 		// Validate bets.
 		checkBets (newBets);
 
-		Session session = getSessionFor (player);
-
 		// Save state.
 		int oldDie0 = die0;
 		int oldDie1 = die1;
@@ -259,10 +257,10 @@ public class CrapsGame extends TableGame implements Constants
 			// All bets are subtracted with each roll.	All unresolved bets are
 			// restored to the player's account with each roll.
 			//
-			Transaction trans = new Transaction ();
+			Transaction trans = new Transaction (this);
 			trans.setWagerAmount (getTotalBet ());
 			trans.setWinAmount (getTotalReturn ());
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 		catch (Exception e)
 		{

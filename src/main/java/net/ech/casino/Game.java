@@ -17,10 +17,9 @@ import java.math.*;
 public abstract class Game 
 {
 	private String id;					// optional id
-	private String gameLabel;			// optional description.
 	private Casino casino;
 	private Machine machine;	
-	private PlayerList players;			// list of players/sessions
+	private Player[] players;
 
 	/**
 	 * Constructor.
@@ -31,7 +30,7 @@ public abstract class Game
 	{
 		this.casino = casino;
 		this.machine = machine;
-		this.players = new PlayerList (machine.getNumberOfSeats ());
+		this.players = new Player [machine.getNumberOfSeats ()];
 	}
 
 	//=======================================================================
@@ -57,22 +56,6 @@ public abstract class Game
 	}
 
 	/**
-	 * Set a non-unique, descriptive label for this game.
-	 */
-	public final void setGameLabel( String gameLabel)
-	{
-	  this.gameLabel = gameLabel;
-	}
-
-	/**
-	 * Get a non-unique, descriptive label for this game.
-	 */
-	public final String getGameLabel()
-	{
-	  return this.gameLabel;
-	}
-
-	/**
 	 * Get the machine associated with this game.  
 	 * @return the machine
 	 */
@@ -92,30 +75,11 @@ public abstract class Game
 	}
 
 	/**
-	 * Get the number of players at this game.
+	 * Get the maximum number of players at this game.
 	 */
-	public int getPlayerCount ()
+	public int getMaxPlayers ()
 	{
-		return players.getPlayerCount ();
-	}
-
-	/**
-	 * Get the array of players at this game.
-	 * No array entry is null.
-	 * @return an array of Players.
-	 */
-	public Player[] getPlayers ()
-	{
-		return players.getPlayers ();
-	}
-
-	/**
-	 * Get the id of the player in the indexed seat.
-	 * @return the player id, or null if the seat is empty.
-	 */
-	public String getPlayer (int seatIndex)
-	{
-		return players.playerAt (seatIndex).getAccountId ();
+		return players.length;
 	}
 
 	/**
@@ -123,19 +87,9 @@ public abstract class Game
 	 * @return the Player, may be null
 	 * @exception ArrayBoundsException if n is an invalid index
 	 */
-	public Player playerAt (int n)
+	public Player getPlayer (int n)
 	{
-		return players.playerAt (n);
-	}
-
-	/**
-	 * Set the casino environment.	(For restoring the casino
-	 * handle of a deserialized game.)
-	 * @param casino	The casino.
-	 */
-	public void setCasino (Casino casino)
-	{
-		this.casino = casino;
+		return players[n];
 	}
 
 	/**
@@ -182,64 +136,23 @@ public abstract class Game
 	public synchronized boolean seatPlayer (Player player)
 		throws AccountingException
 	{
+		// If the player is already seated, ignore.
+		for (int i = 0; i < players.length; ++i) {
+			if (players[i] != null && players[i].getAccountId().equals(player.getAccountId())) {
+				return true;
+			}
+		}
+
 		// Find a seat for this player. 
+		for (int i = 0; i < players.length; ++i) {
+			if (players[i] == null) {
+				players[i] = player;
+				return true;
+			}
+		}
+
 		// If no seats available, return false.
-		//
-		int seatIndex = players.findByAccountId (player.getAccountId ());
-		if (seatIndex < 0)
-		{
-			seatIndex = players.addPlayer (player);
-			if (seatIndex < 0)
-				return false;
-		}
-
-		// A seat has been reserved.  If there is no Session for the
-		// Player already, ask the Casino to create one.
-		//
-		Session session = players.sessionAt (seatIndex);
-		if (session == null)
-		{
-			session = casino.createSession (player);
-			players.setSessionAt (seatIndex, session);
-		}
-		session.open ();
-
-		// Success.
-		return true;
-	}
-
-	/**
-	 * Handle a Player's request to sit out of this Game temporarily.
-	 * @param player	The Player
-	 * @param code		System-specific code giving reason for request
-	 * @param force		If true, the Player leaves no matter what;
-	 *					if false, the Player leaves only if there
-	 *					are no open bets.
-	 * @return true if the Player successfully sat out
-	 * @exception AccountingException	if an accounting error occurred
-	 */
-	public synchronized boolean standPlayer (Player player, String code,
-											 boolean force)
-		throws AccountingException
-	{
-		int seatIndex = players.findByAccountId (player.getAccountId ());
-		if (seatIndex < 0)
-			return true;		// Not seated.
-
-		boolean quitLegal = isQuitLegal (player);
-		if (!force && !quitLegal)
-			return false;
-
-		// Player does not leave, but Session closes.
-		// There is no redemption, because stand-up is temporary.
-		Session session = players.sessionAt (seatIndex);
-		if (session != null)
-		{
-			session.close (code, null);
-			players.setSessionAt (seatIndex, null);
-		}
-
-		return true;
+		return false;
 	}
 
 	/**
@@ -256,22 +169,14 @@ public abstract class Game
 											boolean force)
 		throws AccountingException
 	{
-		int seatIndex = players.findByAccountId (player.getAccountId ());
-		if (seatIndex < 0)
-			return true;		// Not seated.
-
-		if (!force && !isQuitLegal (player)) 
-			return false;
-
-		// Player is leaving.
-		Session session = players.sessionAt (seatIndex);
-		removePlayerAt (seatIndex);
-
-		// Account for it.
-		if (session != null)
-		{
-			session.close (code, getRedemptionAmount (player));
-			players.setSessionAt (seatIndex, null);
+		for (int i = 0; i < players.length; ++i) {
+			if (players[i] != null && players[i].getAccountId().equals(player.getAccountId())) {
+				if (!force && !isQuitLegal (players[i])) 
+					return false;
+				// Player is leaving.
+				removePlayerAt (i);
+				break;
+			}
 		}
 
 		return true;
@@ -282,7 +187,7 @@ public abstract class Game
 	 */
 	public synchronized void removePlayerAt (int seatIndex)
 	{
-		players.removePlayerAt (seatIndex);
+		players[seatIndex] = null;
 	}
 
 	/**
@@ -330,13 +235,12 @@ public abstract class Game
 			throws CasinoException
 		{
 			validate ();
-			Session session = getSessionFor (player);
 
 			saveState ();
 			try
 			{
 				computePlay ();
-				transact (session);
+				transact ();
 			}
 			catch (Exception e)
 			{
@@ -354,31 +258,15 @@ public abstract class Game
 		protected void validate ()
 			throws GameException {}
 		protected void computePlay () {}
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException {}
 		protected void saveState () {}
 		protected void restoreState () {}
 	}
 
 	/**
-	 * Find the session for this Player.
-	 */
-	protected Session getSessionFor (Player player)
-		throws GameException
-	{
-		String id = player.getAccountId ();
-		int seatIndex = players.findByAccountId (player.getAccountId ());
-		if (seatIndex < 0)
-			throw new GameException ("Player " + id + " is not seated.", this);
-		Session session = players.sessionAt (seatIndex);
-		if (session == null)
-			throw new GameException ("Player " + id + ": session expired.", this);
-		return session;
-	}
-
-	/**
 	 * Apply the latest jackpot amount to this Game's properties.
-	 * The Session must call this method whenever the player
+	 * The Casino must call this method whenever the player
 	 * contributes to a jackpot or wins a jackpot.
 	 */
 	protected void applyJackpotAmount (String jackpotName, Money jackpotAmount)

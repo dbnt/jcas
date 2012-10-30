@@ -94,7 +94,7 @@ public abstract class RedDogPlay implements Constants
 		// All plays are synchronized!
 		synchronized (game)
 		{
-			String seatedPlayerId = game.playerAt(seatIndex).getAccountId();
+			String seatedPlayerId = game.getPlayer(seatIndex).getAccountId();
 
 			if (!playerId.equals(seatedPlayerId))
 			{
@@ -110,7 +110,7 @@ public abstract class RedDogPlay implements Constants
 			RedDogModel workingModel = game.copyModel();
 
 			// Open a new transaction.
-			Transaction workingTrans = new Transaction (getName());
+			Transaction workingTrans = new Transaction (game);
 			
 			// Execute player changes to the model; build up the transaction.
 			this.execute (workingModel, workingTrans);

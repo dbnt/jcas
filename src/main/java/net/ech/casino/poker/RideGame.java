@@ -369,12 +369,12 @@ public class RideGame extends TableGame implements CardConstants
 		//
 		// Handle the accounting for this deal.
 		//
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction ("deal");
+			Transaction trans = new Transaction (RideGame.this);
 			trans.setWagerAmount (newAnte * 3);
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 	}
 
@@ -433,11 +433,10 @@ public class RideGame extends TableGame implements CardConstants
 		//
 		// Handle the accounting.
 		//
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction (isWithdraw ? "withdraw"
-															: "let_it_ride");
+			Transaction trans = new Transaction (RideGame.this);
 			int returnAmount = isWithdraw ? ante : 0;
 			if (isDealOk ())
 			{
@@ -448,7 +447,7 @@ public class RideGame extends TableGame implements CardConstants
 			}
 			trans.setReturnAmount (returnAmount);
 
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 	}
 

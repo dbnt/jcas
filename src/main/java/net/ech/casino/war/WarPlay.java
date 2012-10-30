@@ -103,7 +103,7 @@ public abstract class WarPlay implements Constants
 		// All plays are synchronized!
 		synchronized (game)
 		{
-			String seatedPlayerId = game.playerAt(seatIndex).getAccountId();
+			String seatedPlayerId = game.getPlayer(seatIndex).getAccountId();
 
 			if (!playerId.equals(seatedPlayerId))
 			{
@@ -119,7 +119,7 @@ public abstract class WarPlay implements Constants
 			WarModel workingModel = game.copyModel();
 
 			// Open a new transaction.
-			Transaction workingTrans = new Transaction (getName());
+			Transaction workingTrans = new Transaction (game);
 			
 			// Execute player changes to the model; build up the transaction.
 			this.execute (workingModel, workingTrans);

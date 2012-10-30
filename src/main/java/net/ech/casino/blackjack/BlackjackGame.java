@@ -696,13 +696,13 @@ public class BlackjackGame extends TableGame implements Constants
 				throw new IllegalPlayException (BlackjackGame.this);
 		}
 
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
 			boolean closeRound = isDealOk ();
 
 			// Execute transaction.
-			Transaction trans = new Transaction (MoveCodes[move]);
+			Transaction trans = new Transaction (BlackjackGame.this);
 			if (betIncrease > 0)
 				trans.setWagerAmount (betIncrease);
 			if (closeRound)
@@ -712,7 +712,7 @@ public class BlackjackGame extends TableGame implements Constants
 				trans.setReturnAmount (Math.min (totalBet, totalReturn));
 				trans.setWinAmount (Math.max (totalReturn - totalBet, 0));
 			}
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 
 			// Now that transaction has succeeded, let the card
 			// counter do its thing.

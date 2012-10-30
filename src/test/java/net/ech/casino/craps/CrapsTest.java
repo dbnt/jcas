@@ -111,7 +111,7 @@ public final class CrapsTest implements Constants
         // Bet one on the pass line and roll whatever was specified.
         int[] bets = new int[PASS_LINE + 1];
         bets[PASS_LINE] = 1;
-        game.play (game.playerAt(0), bets, new int[] { die1, die2 });
+        game.play (game.getPlayer(0), bets, new int[] { die1, die2 });
 
         assertEquals(game.getDie0(), die1);
 		assertEquals(game.getDie1(), die2);

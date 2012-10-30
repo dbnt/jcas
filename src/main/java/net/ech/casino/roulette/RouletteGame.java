@@ -231,8 +231,6 @@ public class RouletteGame extends TableGame implements Constants
 			totalBet += amount;
 		}
 
-		Session session = getSessionFor (player);
-
 		// Save state.
 		int oldNumber = number;
 		Bet[] oldBets = bets;
@@ -245,12 +243,12 @@ public class RouletteGame extends TableGame implements Constants
 			for (int i = 0; i < bets.length; ++i)
 				machine.computeWin (number, bets[i]);
 
-			Transaction trans = new Transaction ();
+			Transaction trans = new Transaction (this);
 			double totalReturn = getTotalReturn ();
 			trans.setWagerAmount (totalBet);
 			trans.setReturnAmount (Math.min (totalBet, totalReturn));
 			trans.setWinAmount (Math.max (totalReturn - totalBet, 0));
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 
 		}
 		catch (Exception e)

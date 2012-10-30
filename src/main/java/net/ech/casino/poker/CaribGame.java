@@ -486,12 +486,12 @@ public class CaribGame extends TableGame implements CaribConstants
 		//
 		// Handle the accounting for this deal.
 		//
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
 			// Two transactions -- one for the drop, one for the ante --
 			// packaged as one.
-			Transaction trans = new Transaction ("deal");
+			Transaction trans = new Transaction (CaribGame.this);
 			trans.setWagerAmount (ante + drop);
 			trans.setWinAmount (dropPayout);
 
@@ -513,7 +513,7 @@ public class CaribGame extends TableGame implements CaribConstants
 				trans.addJackpotTransaction (jtrans);
 			}
 
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 	}
 
@@ -577,16 +577,16 @@ public class CaribGame extends TableGame implements CaribConstants
 		//
 		// Handle the accounting.
 		//
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction ("call");
+			Transaction trans = new Transaction (CaribGame.this);
 			trans.setWagerAmount (ante * 2);
 			double totalBet = ante * 3;
 			double totalReturn = getWin ();
 			trans.setReturnAmount (Math.min (totalBet, totalReturn));
 			trans.setWinAmount (Math.max (totalReturn - totalBet, 0));
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 	}
 
@@ -618,10 +618,10 @@ public class CaribGame extends TableGame implements CaribConstants
 		//
 		// Handle the accounting.
 		//
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
-			session.executeTransaction (new Transaction ("fold"));
+			getCasino().executeTransaction (new Transaction (CaribGame.this));
 		}
 	}
 	

@@ -253,7 +253,7 @@ public class KenoGame extends CreditsGame
 	private void executeTransaction ()
 		throws CasinoException
 	{
-		Transaction trans = new Transaction ();
+		Transaction trans = new Transaction (this);
 		trans.setWagerAmount (getBetMoney ());
 		if (getWin () > 0)
 		{
@@ -290,7 +290,6 @@ public class KenoGame extends CreditsGame
 		}
 
 		// Commit to database.
-		Session session = getSessionFor (playerAt (0));
-		session.executeTransaction (trans);
+		getCasino().executeTransaction (trans);
 	}
 }

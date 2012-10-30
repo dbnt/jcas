@@ -40,13 +40,20 @@ public class CasinoAdapter implements Casino
 	}
 
 	/**
-	 * Create an accounting Session for a new Player.
-	 * @param player	the Player
-	 * @return a new Session
+	 * @inheritDoc
 	 */
-	public Session createSession (Player player)
-		throws AccountingException
+	public void executeTransaction (Transaction trans)
+		throws CasinoException
 	{
-		return null;
+	}
+
+	/**
+	 * Apply the latest jackpot amount to the Game's properties.
+	 * executeTransaction must call this method whenever the player
+	 * contributes to a jackpot or wins a jackpot.
+	 */
+	protected void applyJackpotAmount (Game game, String jackpotName, Money jackpotAmount)
+	{
+		game.applyJackpotAmount (jackpotName, jackpotAmount);
 	}
 }

@@ -354,29 +354,11 @@ public final class WarTest implements Constants
 
     public static void assertQuitLegal (WarGame game, boolean expected)
     {
-        assertEquals(expected, game.isQuitLegal(game.playerAt(0)));
+        assertEquals(expected, game.isQuitLegal(game.getPlayer(0)));
 
-        if (game.isQuitLegal(game.playerAt(0)))
+        if (game.isQuitLegal(game.getPlayer(0)))
         {
-            assertMoneyEqual(Money.ZERO, game.getRedemptionAmount(game.playerAt(0)));
+            assertMoneyEqual(Money.ZERO, game.getRedemptionAmount(game.getPlayer(0)));
         }
-    }
-
-    public static WarGame serializeDeserialize (WarGame game)
-        throws Exception
-    {
-        ByteArrayOutputStream bytesOut = new ByteArrayOutputStream ();
-        ObjectOutputStream out = new ObjectOutputStream (bytesOut);
-        Casino casino = game.getCasino ();
-        Player player = game.playerAt (0);
-        player.standUp ("why", true);
-        out.writeObject (game);
-        ByteArrayInputStream bytesIn = new ByteArrayInputStream (bytesOut.toByteArray ());
-        ObjectInputStream in = new ObjectInputStream (bytesIn);
-        game = (WarGame) in.readObject ();
-        game.setCasino (casino);
-        player = new Player (player.getAccountId (), game);
-        player.sitDown();
-        return game;
     }
 }

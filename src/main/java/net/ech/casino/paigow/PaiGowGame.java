@@ -371,12 +371,12 @@ public class PaiGowGame extends TableGame implements Constants
 			dealOk = false;
 		}
 
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction ("play");
+			Transaction trans = new Transaction (PaiGowGame.this);
 			trans.setWagerAmount (bet);
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 	}
 
@@ -394,10 +394,10 @@ public class PaiGowGame extends TableGame implements Constants
 			new WongWay (playerIsBanker).set (playerHand);
 		}
 
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
-			session.executeTransaction (new Transaction ("houseway"));
+			getCasino().executeTransaction (new Transaction (PaiGowGame.this));
 		}
 	}
 
@@ -477,17 +477,17 @@ public class PaiGowGame extends TableGame implements Constants
 			playerIsBanker = !playerIsBanker;
 		}
 
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction ("resolve");
+			Transaction trans = new Transaction (PaiGowGame.this);
 			double totalReturn = getWin ();
 			if (totalReturn > 0)
 			{
 				trans.setReturnAmount (bet);
 				trans.setWinAmount (totalReturn - bet);
 			}
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 	}
 

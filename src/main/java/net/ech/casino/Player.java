@@ -7,17 +7,7 @@ package net.ech.casino;
 import java.util.Locale;
 
 /**
- * A Player represents a game participant.	It is similar to a Session
- * but differs in that:
- * <ul>
- * <li>the Player is responsible for initiating game play, while the 
- *	   Session only monitors the results of game play;</li>
- * <li>the Player class may be specialized for a type of Game, encapsulating
- *	   the logic of playing that game, while the Session must be 
- *	   game-independent and specialized for a Casino implementation.</li>
- * </ul>
- *
- * A Player has the following properties:
+ * A Player represents a game participant.  A Player has the following properties:
  * <ol>
  * <li>An account id.  (read-only)</li>
  * <li>An address string that identifies the location of the Player.  May
@@ -33,7 +23,6 @@ import java.util.Locale;
  * <li>A session.</li>
  * </ol>
  *
- * @see net.ech.casino.Session
  * @version 1.1
  * @author James Echmalian, ech@ech.net
  */
@@ -111,17 +100,6 @@ public class Player
 		return game;
 	}
 
-	/**
-	 * Get this Player's current Session.
-	 * @return the Session
-	 * @exception GameException if there is no current Session.
-	 */
-	public Session getSession ()
-		throws GameException
-	{
-		return game.getSessionFor (this);
-	}
-
 	//=======================================================================
 	// METHODS
 	//=======================================================================
@@ -136,21 +114,6 @@ public class Player
 		throws AccountingException
 	{
 		return game.seatPlayer (this);
-	}
-
-	/**
-	 * Leave the game temporarily.
-	 * @param code		System-specific code giving reason 
-	 * @param force		If true, the Player leaves the game no matter what;
-	 *					if false, the Player leaves the game only if there
-	 *					are no open bets.
-	 * @return true if the Player successfully left the game
-	 * @exception AccountingException	if an accounting error occurred
-	 */
-	public boolean standUp (String code, boolean force)
-		throws AccountingException
-	{
-		return game.standPlayer (this, code, force);
 	}
 
 	/**

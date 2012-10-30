@@ -23,7 +23,7 @@ package net.ech.casino;
  */
 public class Transaction
 {
-	private String code;
+	private Game game;
 	private Money wagerAmount;
 	private Money returnAmount;
 	private Money winAmount;
@@ -32,36 +32,17 @@ public class Transaction
 	/**
 	 * Default constructor.
 	 */
-	public Transaction ()
+	public Transaction (Game game)
 	{
+		this.game = game;
 	}
 
 	/**
-	 * Constructor.
-	 * @param code		a game-specific code describing type of transaction
+	 * Get the associated Game.
 	 */
-	public Transaction (String code)
+	public Game getGame()
 	{
-		this.code = code;
-	}
-
-	/**
-	 * Set the transaction code.
-	 * @param code		a game-specific code describing type of transaction
-	 */
-	public void setCode (String code)
-	{
-		this.code = code;
-	}
-
-	/**
-	 * Get the transaction code.
-	 * @return a game-specific code describing type of transaction, may be
-	 * null
-	 */
-	public String getCode ()
-	{
-		return this.code;
+		return game;
 	}
 
 	/**

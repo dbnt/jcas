@@ -19,6 +19,8 @@ public class Bet
 
 	/**
 	 * Constructor.
+	 * @param amount the amount wagered
+	 * @param purseId the account to debit
 	 */
 	public Bet (double amount, String purseId)
 	{

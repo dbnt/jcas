@@ -14,20 +14,25 @@ public interface Casino
 {
 	/**
 	 * Get the default random number generator of this casino.
-	 * @return a Randomizer
 	 */
 	public Randomizer getRandomizer();
 
 	/**
 	 * Get the random number generator to use in the given Game.
+	 * @return a Randomizer
 	 */
 	public Randomizer getRandomizer (Game game);
 
 	/**
-	 * Create an accounting Session for a new Player.
-	 * @param player	the Player
-	 * @return a new Session
+	 * A game transaction has occurred in the Java casino.	Execute the
+	 * transaction in the accounting back end.	
+	 * @see net.ech.casino.Transaction
+	 * @see net.ech.casino.JackpotTransaction
+	 * @exception InsufficientFundsException if the player's balance does not
+	 *									cover the bet amount
+	 * @exception AccountingException	there was an error accessing the
+	 *									accounting back end
 	 */
-	public Session createSession (Player player)
-		throws AccountingException;
+	public abstract void executeTransaction (Transaction trans)
+		throws CasinoException;
 }

@@ -112,12 +112,12 @@ public class RedDogGame extends TableGame implements Constants
 	private String checkPlayer (int seatIndex)
 		throws GameException
 	{
-		String playerId = getPlayer (seatIndex);
-		if (playerId == null)
+		Player player = getPlayer (seatIndex);
+		if (player == null)
 		{
 			throw new GameException ("No player in seat " + seatIndex, this);
 		}
-		return playerId;
+		return player.getAccountId();
 	}
 
 	//=======================================================================
@@ -298,7 +298,7 @@ public class RedDogGame extends TableGame implements Constants
 				// purse id should be sufficient!  what if the player
 				// quits mid-hand?
 
-				trans.addWin ("ante", getPlayer(i), ante.getPurse(),
+				trans.addWin ("ante", getPlayer(i).getAccountId(), ante.getPurse(),
 							  ante.getAmount().multiply (PAY_FOR_TIE));
 
 				model.showTake (i, trans.getReturnAmount().add (
@@ -326,7 +326,7 @@ public class RedDogGame extends TableGame implements Constants
 				// Pay the ante either 1:1 or the multiple, depending on
 				// machine setting.
 				//
-				trans.addWin ("ante", getPlayer(i), ante.getPurse(),
+				trans.addWin ("ante", getPlayer(i).getAccountId(), ante.getPurse(),
 					getRedDogMachine().isMultipleAppliedToAnte()
 						? ante.getAmount().multiply (payMultiple)
 						: ante.getAmount());
@@ -336,7 +336,7 @@ public class RedDogGame extends TableGame implements Constants
 				{
 					// Return their raise, and pay the multiple on it.
 					trans.addRefund ("raise", raise);
-					trans.addWin ("raise", getPlayer(i), raise.getPurse(),
+					trans.addWin ("raise", getPlayer(i).getAccountId(), raise.getPurse(),
 								  raise.getAmount().multiply (payMultiple));
 				}
 
@@ -386,11 +386,8 @@ public class RedDogGame extends TableGame implements Constants
 			// Pending model becomes the real model, temporarily.
 			this.table = model;
 
-			// TEMPORARY GROSSNESS:
-			Session session = getSessionFor(playerAt(0));
-
 			// Take it to the accounting system.
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 		catch (Exception e)
 		{
@@ -411,12 +408,5 @@ public class RedDogGame extends TableGame implements Constants
 	public synchronized void removePlayerAt (int seatIndex)
 	{
 		super.removePlayerAt (seatIndex);
-	}
-
-	// TEMPORARY
-	private String getPlayerAt (int seatIndex)
-	{
-		Player p = playerAt(seatIndex);
-		return p == null ? null : p.getAccountId();
 	}
 }

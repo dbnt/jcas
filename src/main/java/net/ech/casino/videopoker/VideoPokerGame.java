@@ -388,12 +388,12 @@ public class VideoPokerGame extends CreditsGame implements Constants
 			doubleUpCount = 0;
 		}
 
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction ("deal");
+			Transaction trans = new Transaction (VideoPokerGame.this);
 			trans.setWagerAmount (getBetMoney ());
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 	}
 
@@ -439,17 +439,17 @@ public class VideoPokerGame extends CreditsGame implements Constants
 			state = DealState;
 		}
 
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction ("draw");
+			Transaction trans = new Transaction (VideoPokerGame.this);
 			if (getWin () > 0)
 			{
 				trans.setReturnAmount (getBetMoney ());
 				trans.setWinAmount (getWinMoney ().subtract (getBetMoney ()));
 			}
 
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 	}
 
@@ -483,12 +483,12 @@ public class VideoPokerGame extends CreditsGame implements Constants
 			++doubleUpCount;
 		}
 
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction ("doubleup");
+			Transaction trans = new Transaction (VideoPokerGame.this);
 			trans.setWagerAmount (getBetMoney ());
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 	}
 
@@ -532,16 +532,16 @@ public class VideoPokerGame extends CreditsGame implements Constants
 			state = DealState;
 		}
 
-		protected void transact (Session session)
+		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction ("pick");
+			Transaction trans = new Transaction (VideoPokerGame.this);
 			if (getWin () > 0)
 			{
 				trans.setReturnAmount (getBetMoney ());
 				trans.setWinAmount (getBetMoney ());
 			}
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 	}
 

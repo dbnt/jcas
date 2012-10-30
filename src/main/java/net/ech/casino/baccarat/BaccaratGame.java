@@ -251,8 +251,6 @@ public class BaccaratGame extends TableGame implements Constants
 		if (playerBet > maxBet || bankBet > maxBet || tieBet > maxBet)
 			throw new GameException ("Bet exceeds maximum.", this);
 
-		Session session = getSessionFor (player);
-
 		// Save state.
 		//
 		Shoe oldShoe = shoe.copy ();
@@ -266,12 +264,12 @@ public class BaccaratGame extends TableGame implements Constants
 		try
 		{
 			computeHand (playerBet, bankBet, tieBet, reshuffleRequested);
-			Transaction trans = new Transaction ();
+			Transaction trans = new Transaction (this);
 			double totalReturn = getTotalReturn ();
 			trans.setWagerAmount (totalBet);
 			trans.setReturnAmount (Math.min (totalBet, totalReturn));
 			trans.setWinAmount (Math.max (totalReturn - totalBet, 0));
-			session.executeTransaction (trans);
+			getCasino().executeTransaction (trans);
 		}
 		catch (Exception e)
 		{

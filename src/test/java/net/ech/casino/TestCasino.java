@@ -51,25 +51,6 @@ public class TestCasino extends CasinoAdapter
     }
 
     /**
-     * Look up a machine (THE machine).
-     */
-    public Machine getMachine (String machineId)
-    {
-        return machine;
-    }
-
-    /**
-     * Create an accounting Session for a new Player.
-     * @param player    the Player
-     * @return a new Session
-     */
-    public Session createSession (Player player)
-    {
-        Game game = player.getGame ();
-        return new TestSession (player);
-    }
-
-    /**
      * Get this casino's jackpot manager.
      * @return the jackpot manager, never null.
      */
@@ -131,58 +112,36 @@ public class TestCasino extends CasinoAdapter
         return new Money (n).toString ();
     }
 
-    //==================================================================
-    //
-    // Session.
-    //
-    //==================================================================
+	public void executeTransaction (Transaction trans)
+		throws CasinoException
+	{
+		tallyBet (trans.getWagerAmount ());
+		tallyWin (trans.getReturnAmount ());
+		tallyWin (trans.getWinAmount ());
 
-    private class TestSession extends Session 
-    {
-        TestSession (Player player)
-        {
-            super (player);
-        }
+		for (int i = 0; i < trans.getJackpotTransactionCount (); ++i)
+		{
+			JackpotTransaction jtrans = trans.getJackpotTransaction (i);
+			String jackpotName = jtrans.getJackpotName ();
+			Money jackpotAmount = null;
+			if (jtrans.isContribution())
+			{
+				jackpotAmount = jackpots.addToJackpot (jackpotName, jtrans.getContributionAmount());
+			}
+			if (jtrans.isClaim ())
+			{
+				jackpotAmount = jackpots.claimJackpot (jackpotName, jtrans.getClaimFactor());
+				tallyWin (jackpotAmount);
+			}
+			applyJackpotAmount (trans.getGame(), jackpotName, jackpotAmount);
+		}
 
-        public Money getBalance ()
-        {
-            return balance;
-        }
+		TestCasino.this.lastTransaction = trans;
 
-        public void executeTransaction (Transaction trans)
-			throws CasinoException
-        {
-            tallyBet (trans.getWagerAmount ());
-            tallyWin (trans.getReturnAmount ());
-            tallyWin (trans.getWinAmount ());
-
-            for (int i = 0; i < trans.getJackpotTransactionCount (); ++i)
-            {
-                JackpotTransaction jtrans = trans.getJackpotTransaction (i);
-                String jackpotName = jtrans.getJackpotName ();
-                Money jackpotAmount = null;
-                if (jtrans.isContribution())
-                {
-                    jackpotAmount = jackpots.addToJackpot (jackpotName, jtrans.getContributionAmount());
-                }
-                if (jtrans.isClaim ())
-                {
-                    jackpotAmount = jackpots.claimJackpot (jackpotName, jtrans.getClaimFactor());
-                    tallyWin (jackpotAmount);
-                }
-                applyJackpotAmount (jackpotName, jackpotAmount);
-            }
-
-            TestCasino.this.lastTransaction = trans;
-
-            if (getGame ().isQuitLegal (getPlayer ()))
-                tallyRound ();
-        }
-
-        public void close (String code, Money redemption)
-        {
-        }
-    }
+		if (trans.getGame ().isQuitLegal (trans.getGame().getPlayer(0))) {
+			tallyRound ();
+		}
+	}
 
     /**
      * Subclass may extend to respond to each new bet.
