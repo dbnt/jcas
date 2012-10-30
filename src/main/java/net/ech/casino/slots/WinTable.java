@@ -54,7 +54,7 @@ public class WinTable extends Win
 	 */
 	public String toString ()
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 
 		for (int i = 0; i < table.length; ++i)
 		{

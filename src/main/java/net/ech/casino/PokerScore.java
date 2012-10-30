@@ -383,7 +383,7 @@ public class PokerScore
 
 	private String formatFlush (int detail)
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 		buf.append ("flush");
 		if (detail > 1)
 		{
@@ -415,7 +415,7 @@ public class PokerScore
 		if (detail == 1)
 			return "full house";
 
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 		appendRankString (rank, true, buf);
 		buf.append (" full of ");
 		appendRankString (kicker1, true, buf);
@@ -424,7 +424,7 @@ public class PokerScore
 
 	private String formatTwoPair (int detail)
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 
 		appendRankString (rank, true, buf);
 		buf.append (" over ");
@@ -442,7 +442,7 @@ public class PokerScore
 
 	private String formatTuple (String prefix)
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 		buf.append (prefix);
 		buf.append (' ');
 		appendRankString (rank, true, buf);
@@ -451,7 +451,7 @@ public class PokerScore
 
 	private String formatPair (int detail)
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 
 		buf.append ("pair of ");
 		appendRankString (rank, true, buf);
@@ -487,7 +487,7 @@ public class PokerScore
 
 	private String formatHighCard (int detail)
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 
 		appendRankString (primary, false, buf);
 		buf.append (" high");
@@ -539,7 +539,7 @@ public class PokerScore
 		//return 1;
 	}
 
-	private void appendRankString (byte rank, boolean plural, StringBuffer buf)
+	private void appendRankString (byte rank, boolean plural, StringBuilder buf)
 	{
 		buf.append (rankString (rank));
 		if (plural)

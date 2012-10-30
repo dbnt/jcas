@@ -131,7 +131,7 @@ public class SlotsGame extends CreditsGame
 	{
 		int[] symbols = getSymbols (payLineIndex);
 
-		StringBuffer buf = new StringBuffer (symbols.length);
+		StringBuilder buf = new StringBuilder (symbols.length);
 
 		for (int i = 0; i < symbols.length; ++i)
 		{

@@ -170,7 +170,7 @@ public class Card implements CardConstants
 	 */
 	public static String toString (byte cardValue)
 	{
-		return appendCard (cardValue, new StringBuffer ()).toString ();
+		return appendCard (cardValue, new StringBuilder ()).toString ();
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class Card implements CardConstants
 		if (cards == null)
 			return null;
 
-		StringBuffer buf = new StringBuffer (20);
+		StringBuilder buf = new StringBuilder (20);
 
 		for (int i = 0; i < cards.length; ++i)
 		{
@@ -201,7 +201,7 @@ public class Card implements CardConstants
 		return buf.toString ();
 	}
 
-	private static StringBuffer appendCard (byte cardValue, StringBuffer buf)
+	private static StringBuilder appendCard (byte cardValue, StringBuilder buf)
 	{
 		if (!isValid (cardValue))
 		{

@@ -66,7 +66,7 @@ public class UniformPatternLong extends Pattern
 
 	public String toString ()
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 		if (number > 0)
 		{
 			buf.append ("any ");

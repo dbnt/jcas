@@ -83,7 +83,7 @@ public class Way implements java.io.Serializable
 	 */
 	public String getMarkedString ()
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 
 		for (int i = 0; i < size; ++i)
 		{

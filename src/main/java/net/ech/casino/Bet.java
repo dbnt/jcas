@@ -62,7 +62,7 @@ public class Bet
 	 */
 	public String toString ()
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 		buf.append ("Bet(");
 		buf.append (amount);
 		if (purseId.length() > 0)

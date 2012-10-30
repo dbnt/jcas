@@ -63,7 +63,7 @@ public class Hand implements Constants, java.io.Serializable
 	 */
 	public String getScoresString ()
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 
 		int score = 0;
 		for (int i = 0; i < length; ++i)
@@ -95,7 +95,7 @@ public class Hand implements Constants, java.io.Serializable
 	 */
 	public String toString (boolean separateCards)
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 
 		for (int i = 0; i < length; ++i)
 		{

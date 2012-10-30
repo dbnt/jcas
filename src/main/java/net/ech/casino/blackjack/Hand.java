@@ -191,7 +191,7 @@ public class Hand implements Constants, Cloneable, java.io.Serializable
 	 */
 	public String toString (String separator)
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 
 		for (int i = 0; i < size; ++i)
 		{

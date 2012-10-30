@@ -168,7 +168,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 		if (holds == null)
 			return null;
 
-		StringBuffer buf = new StringBuffer (5);
+		StringBuilder buf = new StringBuilder (5);
 
 		for (int i = 0; i < CardsInHand; ++i)
 			buf.append (holds[i] ? 'H' : ' ');

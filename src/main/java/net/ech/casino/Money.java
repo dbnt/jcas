@@ -274,7 +274,7 @@ public class Money extends Number
 	 */
 	public String toString ()
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 		int cents = this.cents;
 		if (cents < 0)
 		{

@@ -60,7 +60,7 @@ public class KenoGame extends CreditsGame
 
 	public String getNumberString ()
 	{
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 
 		if (numbers != null)
 		{

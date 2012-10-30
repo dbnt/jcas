@@ -124,7 +124,7 @@ public class Point implements Constants
 				return name;
 		}
 
-		StringBuffer buf = new StringBuffer ();
+		StringBuilder buf = new StringBuilder ();
 
 		int bitCount = 0;
 		long bitMask = 1L;
