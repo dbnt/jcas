@@ -73,4 +73,10 @@ public class Setting implements Constants
 
 		return result;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "setting(" + index1 + "," + index2 + ")";
+	}
 }

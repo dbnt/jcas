@@ -119,12 +119,12 @@ public class HouseWay implements Constants
 		}
 
 		// Compaction.
-		n = compact(scoredSettings);
-		if (n == 0)
+		scoredSettings = compact(scoredSettings);
+		if (scoredSettings.length == 0)
 			throw new RuntimeException ("All settings dominated!!!");
 
 		ScoredSetting finalSetting =
-			n == 1 ? scoredSettings[0] : applyStrategy (scoredSettings, n);
+			scoredSettings.length == 1 ? scoredSettings[0] : applyStrategy (scoredSettings);
 
 		byte[] finalHand = finalSetting.set (hand);
 
@@ -135,21 +135,22 @@ public class HouseWay implements Constants
 	}
 
 	/**
-	 * Of all usable settings, pick the one to use.
+	 * Of all usable settings, pick the one to use.  Assume that dominated settings have been removed.
 	 *
-	 * This default implementation returns the setting with the maximum
-	 * two-card hand.  It assumes the array has been compacted and dominated
-	 * settings have been removed.
-	 *
-	 * Subclass must extend this method to apply more sophisticated
+	 * Subclass must override this method to apply more sophisticated
 	 * strategy.
 	 */
-	protected ScoredSetting applyStrategy (ScoredSetting[] ss, int n)
+	protected ScoredSetting applyStrategy (ScoredSetting[] ss)
 	{
 		// Default strategy: pick the setting with the highest two-card hand.
+		return best2Hand(ss);
+	}
 
+	protected static ScoredSetting best2Hand(ScoredSetting[] ss)
+	{
+		if (ss.length == 0) return null;
 		int best = 0;
-		for (int i = 1; i < n; ++i)
+		for (int i = 1; i < ss.length; ++i)
 		{
 			if (ss[i].twoScore.compareTo (ss[best].twoScore) > 0)
 				best = i;
@@ -162,7 +163,7 @@ public class HouseWay implements Constants
 	 * Move non-null entries to the left of the scored setting array.
 	 * Return the number.
 	 */
-	private int compact(ScoredSetting[] scoredSettings)
+	protected static ScoredSetting[] compact(ScoredSetting[] scoredSettings)
 	{
 		int n = 0;
 		for (int i = 0; i < scoredSettings.length; ++i)
@@ -170,31 +171,15 @@ public class HouseWay implements Constants
 			if (scoredSettings[i] != null)
 				scoredSettings[n++] = scoredSettings[i];
 		}
-		return n;
-	}
 
+		if (n == scoredSettings.length) return scoredSettings;
 
-	/**
-	 * Narrow the field of considered settings to include only those
-	 * having a five-hand at least as good as the given reference score.
-	 *
-	 * Not currently used, left here for reference.
-	 */
-	protected void narrowBy5Score(ScoredSetting[] scoredSettings,
-								  PokerScore refScore)
-	{
-		for (int i = 0; i < scoredSettings.length; ++i)
+		ScoredSetting[] result = new ScoredSetting[n];
+		for (int i = 0; i < n; ++i)
 		{
-			ScoredSetting si = scoredSettings[i];
-			if (si == null)
-				continue;
-
-			int cmp5 = si.fiveScore.compareTo (refScore);
-			if (cmp5 < 0)
-			{
-				scoredSettings[i] = null;
-			}
+			result[i] = scoredSettings[i];
 		}
+		return result;
 	}
 
 	/**
@@ -298,40 +283,5 @@ public class HouseWay implements Constants
 				return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Test code.
-	 */
-	public static void main (String[] args)
-	{
-		try
-		{
-			byte[] cards = new byte [7];
-			int cardCount = 0;
-			for (int i = 0; i < args.length; ++i)
-			{
-				String arg = args[i];
-				for (int cx = 0; cx < arg.length (); cx += 2)
-				{
-					byte card = Card.parse (arg, cx);
-					if (card == NilCard)
-						throw new Exception ("Bad card: " +
-												arg.substring (cx, cx + 2));
-					cards[cardCount++] = card;
-				}
-			}
-
-			if (cardCount != 7)
-				throw new Exception ("Wrong number of cards.");
-
-			new HouseWay ().set (cards);
-			System.out.println (Card.toString (cards, " "));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace (System.err);
-			System.exit (1);
-		}
 	}
 }
