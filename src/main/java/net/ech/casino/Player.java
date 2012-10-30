@@ -37,7 +37,7 @@ import java.util.Locale;
  * @version 1.1
  * @author James Echmalian, ech@ech.net
  */
-public class Player implements java.io.Serializable
+public class Player
 {
 	private String accountId;			// key to user info
 	private String clientAddress;		// player's location

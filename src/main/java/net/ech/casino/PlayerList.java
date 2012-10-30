@@ -10,7 +10,7 @@ package net.ech.casino;
  * @version 1.1
  * @author James Echmalian, ech@ech.net
  */
-public final class PlayerList implements java.io.Serializable
+public final class PlayerList
 {
 	private Player[] players;
 	private Session[] sessions;

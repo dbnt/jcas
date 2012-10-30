@@ -17,7 +17,7 @@ import java.util.*;
  * @version 1.1
  * @author James Echmalian, ech@ech.net
  */
-public abstract class Winner implements Constants, java.io.Serializable
+public abstract class Winner implements Constants
 {
 	//===================================================================
 	// Static interface

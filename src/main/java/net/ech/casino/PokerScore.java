@@ -14,7 +14,7 @@ package net.ech.casino;
  * @author James Echmalian, ech@ech.net
  */
 public class PokerScore
-	implements CardConstants, java.io.Serializable, java.lang.Cloneable
+	implements CardConstants, java.lang.Cloneable
 {
 	/**
 	 * Primary hand type codes.

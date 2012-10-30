@@ -10,7 +10,7 @@ package net.ech.casino.slots;
  * @version 1.2
  * @author James Echmalian, ech@ech.net
  */
-public abstract class Reward implements java.io.Serializable
+public abstract class Reward
 {
 	/**
 	 * Execute the effect of hitting this payline on the given game.

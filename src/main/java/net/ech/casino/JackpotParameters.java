@@ -13,7 +13,7 @@ package net.ech.casino;
  * @version 1.0
  * @author James Echmalian, ech@ech.net
  */
-public class JackpotParameters implements java.io.Serializable
+public class JackpotParameters
 {
 	private String jackpotName;
 	private Money jackpotBaseAmount;

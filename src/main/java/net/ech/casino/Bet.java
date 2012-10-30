@@ -12,7 +12,7 @@ package net.ech.casino;
  * @author James Echmalian, ech@ech.net
  */
 public class Bet
-	implements java.io.Serializable, java.lang.Cloneable
+	implements java.lang.Cloneable
 {
 	private Money amount;
 	private String purseId;

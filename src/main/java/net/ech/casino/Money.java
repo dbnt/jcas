@@ -11,7 +11,7 @@ package net.ech.casino;
  * @author James Echmalian, ech@ech.net
  */
 public class Money extends Number
-	implements java.io.Serializable, java.lang.Cloneable
+	implements java.lang.Cloneable
 {
 	public final static Money ZERO = new Money (0);
 

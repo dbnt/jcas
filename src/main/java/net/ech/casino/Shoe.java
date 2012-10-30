@@ -15,7 +15,7 @@ package net.ech.casino;
  * @author James Echmalian, ech@ech.net
  * @version 1.1
  */
-public class Shoe implements CardConstants, Cloneable, java.io.Serializable
+public class Shoe implements CardConstants, Cloneable
 {
 	// Machine parameters:
 	private int numberOfDecks;

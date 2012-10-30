@@ -9,7 +9,7 @@ import net.ech.casino.Money;
 /**
  * A Bet is an object to hold per-bet information.
  */
-public class Bet implements java.io.Serializable
+public class Bet
 {
 	private int amount;
 	private long point;

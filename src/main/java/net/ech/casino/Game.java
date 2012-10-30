@@ -14,7 +14,7 @@ import java.math.*;
  * @version 1.1
  * @author James Echmalian, ech@ech.net
  */
-public abstract class Game implements java.io.Serializable
+public abstract class Game 
 {
 	private String id;					// optional id
 	private String gameLabel;			// optional description.
@@ -22,9 +22,6 @@ public abstract class Game implements java.io.Serializable
 	private PlayerList players;			// list of players/sessions
 	private transient Casino casino;	// callback
 	private transient Machine machine;	// cached
-
-	/** Serialization version is fixed! */
-	static final long serialVersionUID = -5375216699014535110L;
 
 	/**
 	 * Constructor.

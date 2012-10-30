@@ -21,7 +21,7 @@ package net.ech.casino;
  * @author James Echmalian, ech@ech.net
  */
 public abstract class Machine
-	implements java.io.Serializable, java.lang.Cloneable
+	implements java.lang.Cloneable
 {
 	private String id = "";
 	private int maxBet = 1;			 // maximum bet is usually variable.

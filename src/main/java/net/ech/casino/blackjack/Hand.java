@@ -12,13 +12,8 @@ import net.ech.casino.*;
  * @version 1.0
  * @author James Echmalian, ech@ech.net
  */
-public class Hand implements Constants, Cloneable, java.io.Serializable
+public class Hand implements Constants, Cloneable
 {
-	/**
-	 * Note: serial version is fixed!
-	 */
-	static final long serialVersionUID = -5329555999313652342L;
-
 	public final static int MaxCards = 25;
 
 	private byte[] cards = new byte [MaxCards];

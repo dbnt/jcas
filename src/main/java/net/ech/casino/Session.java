@@ -17,7 +17,7 @@ import java.util.*;
  * @version 1.1
  * @author James Echmalian, ech@ech.net
  */
-public abstract class Session implements java.io.Serializable
+public abstract class Session
 {
 	private String id;
 	private Player player;

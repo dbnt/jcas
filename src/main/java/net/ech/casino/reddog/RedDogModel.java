@@ -13,7 +13,6 @@ import net.ech.casino.*;
  * @author James Echmalian, ech@ech.net
  */
 public class RedDogModel extends RedDogTable
-	implements java.io.Serializable
 {
 	// Warning: copy method is not based on clone()!  Must copy 
 	// individual instance variables.

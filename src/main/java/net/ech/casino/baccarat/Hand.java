@@ -12,7 +12,7 @@ import net.ech.casino.*;
  * @version 1.1
  * @author James Echmalian, ech@ech.net
  */
-public class Hand implements Constants, java.io.Serializable
+public class Hand implements Constants
 {
 	private byte[] cards = new byte [MaxCardsInHand];
 	private int length;

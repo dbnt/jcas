@@ -21,7 +21,7 @@ package net.ech.casino;
  * @version 1.1
  * @author James Echmalian, ech@ech.net
  */
-public class Transaction implements java.io.Serializable
+public class Transaction
 {
 	private String code;
 	private Money wagerAmount;

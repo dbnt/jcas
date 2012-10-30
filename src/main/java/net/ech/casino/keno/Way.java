@@ -10,7 +10,7 @@ import java.util.*;
  * "Way" is the keno term for a group of marked numbers -- a
  * "way" to win.
  */
-public class Way implements java.io.Serializable
+public class Way
 {
 	private String id;
 	private int size;

@@ -14,7 +14,6 @@ import net.ech.casino.*;
  */
 public class WarModel
 	extends WarTable
-	implements java.io.Serializable
 {
 	// Warning: copy method is not based on clone()!  Must copy 
 	// individual instance variables.

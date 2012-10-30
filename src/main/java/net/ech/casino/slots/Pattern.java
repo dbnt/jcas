@@ -13,7 +13,7 @@ import java.util.*;
  * @version 1.1
  * @author James Echmalian, ech@ech.net
  */
-public abstract class Pattern implements java.io.Serializable
+public abstract class Pattern
 {
 	public final static int ANY = ~0;	// extends to ~0L
 

@@ -17,7 +17,7 @@ package net.ech.casino;
  * @author James Echmalian, ech@ech.net
  * @version 1.0
  */
-public class Deck implements CardConstants, java.io.Serializable
+public class Deck implements CardConstants
 {
 	private int nJokers = 0;
 

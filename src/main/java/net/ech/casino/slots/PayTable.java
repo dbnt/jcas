@@ -12,7 +12,7 @@ import java.util.*;
  * @version 1.2
  * @author James Echmalian, ech@ech.net
  */
-public class PayTable implements java.io.Serializable
+public class PayTable
 {
 	private final static int DEFAULT_WIN_LEVEL = 2;
 

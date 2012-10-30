@@ -19,7 +19,7 @@ package net.ech.casino;
  * @version 1.1
  * @author James Echmalian, ech@ech.net
  */
-public class JackpotTransaction implements java.io.Serializable
+public class JackpotTransaction
 {
 	private String jackpotName;
 	private double contributionAmount;
