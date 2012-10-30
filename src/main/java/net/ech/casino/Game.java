@@ -18,10 +18,9 @@ public abstract class Game
 {
 	private String id;					// optional id
 	private String gameLabel;			// optional description.
-	private String machineId;			// key to static rules/parameters
+	private Casino casino;
+	private Machine machine;	
 	private PlayerList players;			// list of players/sessions
-	private transient Casino casino;	// callback
-	private transient Machine machine;	// cached
 
 	/**
 	 * Constructor.
@@ -31,7 +30,7 @@ public abstract class Game
 	public Game (Casino casino, Machine machine)
 	{
 		this.casino = casino;
-		this.machineId = machine.getId ();
+		this.machine = machine;
 		this.players = new PlayerList (machine.getNumberOfSeats ());
 	}
 
@@ -79,27 +78,7 @@ public abstract class Game
 	 */
 	public Machine getMachine ()
 	{
-		// Avoid synchronizing on the game every time.
-		if (machine == null)
-		{
-			synchronized (this)
-			{
-				if (machine == null)
-				{
-					machine = casino.getMachine (machineId);
-				}
-			}
-		}
 		return machine;
-	}
-
-	/**
-	 * Get the machine id associated with this game.  
-	 * @return the machine's unique id string
-	 */
-	public String getMachineId ()
-	{
-		return machineId;
 	}
 
 	/**

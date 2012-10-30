@@ -40,25 +40,6 @@ public class CasinoAdapter implements Casino
 	}
 
 	/**
-	 * Get the machine uniquely identified by the given key.
-	 * @return the Machine, or null if the key is invalid.
-	 */
-	public Machine getMachine (String machineId)
-	{
-		return null;
-	}
-
-	/**
-	 * Find a game in progress with the given unique machine id and 
-	 * player id.
-	 */
-	public Game findGame (String machineId, String playerId)
-		throws CasinoException
-	{
-		return null;
-	}
-
-	/**
 	 * Create an accounting Session for a new Player.
 	 * @param player	the Player
 	 * @return a new Session
