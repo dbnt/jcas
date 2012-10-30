@@ -47,6 +47,20 @@ public class Card implements CardConstants
 	}
 
 	/**
+	 * Create an array of card values from a String.
+	 * @return an array of card values - NilCard for any invalid string entry
+	 * @exception StringIndexOutOfBoundsException if the length of the string is odd
+	 */
+	public static byte[] parseHand (String handString)
+	{
+		byte[] result = new byte[handString.length() / 2];
+		for (int i = 0; i < handString.length(); i += 2) {
+			result[i / 2] = parse (handString, i);
+		}
+		return result;
+	}
+
+	/**
 	 * Create a card value from a two-character String.
 	 * @return the card value, or NilCard if string is invalid.
 	 * @exception StringIndexOutOfBoundsException

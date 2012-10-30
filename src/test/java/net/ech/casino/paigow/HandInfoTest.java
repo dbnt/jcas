@@ -7,6 +7,7 @@ package net.ech.casino.paigow;
 import net.ech.casino.Card;
 import net.ech.casino.PokerScore;
 import org.junit.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
@@ -23,59 +24,41 @@ public class HandInfoTest implements Constants
 	public void testTwoCardPaiGowScoring()
 		throws Exception
     {
-		assertEqual ("3H4H", PokerScore.makeHighCard (Four, Three));
-		assertEqual ("6C4H", PokerScore.makeHighCard (Six, Four));
-		assertEqual ("6C6H", PokerScore.makePair (Six));
-		assertEqual ("KCQH", PokerScore.makeHighCard (King, Queen));
-		assertEqual ("QHjo", PokerScore.makeHighCard (Ace, Queen));
-		assertEqual ("jo2H", PokerScore.makeHighCard (Ace, Deuce));
-		assertEqual ("joAH", PokerScore.makePair (Ace));
+		scoreAndAssert("3H4H", PokerScore.makeHighCard (Four, Three));
+		scoreAndAssert("6C4H", PokerScore.makeHighCard (Six, Four));
+		scoreAndAssert("6C6H", PokerScore.makePair (Six));
+		scoreAndAssert("KCQH", PokerScore.makeHighCard (King, Queen));
+		scoreAndAssert("QHjo", PokerScore.makeHighCard (Ace, Queen));
+		scoreAndAssert("jo2H", PokerScore.makeHighCard (Ace, Deuce));
+		scoreAndAssert("joAH", PokerScore.makePair (Ace));
 	}
 
     @Test
 	public void testFiveCardPaiGowScoring()
 		throws Exception
     {
-		assertEqual ("KH6H3H4HAH",
-			PokerScore.makeFlush (Ace, King, Six, Four));
-		assertEqual ("jo6H3H4H8H",
-			PokerScore.makeFlush (Ace, Eight, Six, Four));
-		assertEqual ("jo6H3H4HAH",
-			PokerScore.makeFlush (Ace, Six, Four, Three));
-		assertEqual ("4H4SASAD4C",
-			PokerScore.makeFullHouse (Four, Ace));
-		assertEqual ("jo4SASAD4C",
-			PokerScore.makeFullHouse (Ace, Four));
-		assertEqual ("4S6SAD4C8D",
-			PokerScore.makePair (Four, Ace, Eight, Six));
-		assertEqual ("QCQSTD6S3S",
-			PokerScore.makePair (Queen, Ten, Six, Three));
-		assertEqual ("9C9SASKSQS",
-			PokerScore.makePair (Nine, Ace, King, Queen));
+		scoreAndAssert("KH6H3H4HAH", PokerScore.makeFlush (Ace, King, Six, Four));
+		scoreAndAssert("jo6H3H4H8H", PokerScore.makeFlush (Ace, Eight, Six, Four));
+		scoreAndAssert("jo6H3H4HAH", PokerScore.makeFlush (Ace, Six, Four, Three));
+		scoreAndAssert("4H4SASAD4C", PokerScore.makeFullHouse (Four, Ace));
+		scoreAndAssert("jo4SASAD4C", PokerScore.makeFullHouse (Ace, Four));
+		scoreAndAssert("4S6SAD4C8D", PokerScore.makePair (Four, Ace, Eight, Six));
+		scoreAndAssert("QCQSTD6S3S", PokerScore.makePair (Queen, Ten, Six, Three));
+		scoreAndAssert("9C9SASKSQS", PokerScore.makePair (Nine, Ace, King, Queen));
 		
 		// This straight counts as ace-low straight in pai gow, not
 		// as a 6-high straight, because in pai gow, the ace-low
 		// straight is the *second* highest straight.
-		assertEqual ("jo5H4D3S2C", PokerScore.makeAceLowStraight ());
+		scoreAndAssert("jo5H4D3S2C", PokerScore.makeAceLowStraight ());
 	 }
 
-    static void assertEqual (String cardString, PokerScore trueScore)
+    private static void scoreAndAssert (String cardString, PokerScore expected)
         throws Exception
     {
-        byte[] cards = new byte [5];
-        int cardCount = 0;
-        for (int cx = 0; cx < cardString.length (); cx += 2)
-        {
-            byte card = Card.parse (cardString, cx);
-            if (card == NilCard)
-            {
-                fail("Bad card: " + cardString.substring (cx, cx + 2));
-            }
-            cards[cardCount++] = card;
-        }
+        byte[] cards = Card.parseHand(cardString);
 
         PokerScore testScore = null;
-        switch (cardCount)
+        switch (cards.length)
         {
         case 5:
             testScore = HandInfo.score5 (cards, 0);
@@ -87,11 +70,6 @@ public class HandInfoTest implements Constants
             fail("Wrong number of cards.");
         }
 
-        if (!testScore.equals (trueScore))
-        {
-            String testString = testScore.format (cardCount);
-            String trueString = trueScore.format (cardCount);
-            fail ("Pai Gow scoring: expected " + trueString + "; got " + testString);
-        }
+        assertEquals(expected, testScore);
     }
 }

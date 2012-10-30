@@ -194,25 +194,13 @@ public class WongWayTest implements Constants
 	private void testWongWay(WongWay ww, String cardString, String expected)
 	{
 		assertEquals(14, cardString.length());
-        byte[] cards = parseCards(cardString);
+        byte[] cards = Card.parseHand(cardString);
 		assertEquals(7, cards.length);
 		ww.set (cards);
 		String result = Card.toString (cards);
 		assertTrue (
 			cardString + ": expected " + expected + ", got " + result,
 			equalsIgnoreQ (result, expected));
-    }
-
-    private static byte[] parseCards(String cardString)
-    {
-        byte[] cards = new byte [CardsInHand];
-
-        for (int cx = 0; cx < CardsInHand; ++cx)
-        {
-            cards[cx] = Card.parse (cardString, cx * 2);
-        }
-
-        return cards;
     }
 
     private static String reverseCardString(String cardString)
