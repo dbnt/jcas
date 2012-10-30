@@ -10,8 +10,9 @@ package net.ech.casino.videopoker;
  * @version 1.1
  * @author James Echmalian, ech@ech.net
  */
-public class Payout implements Constants, java.io.Serializable
+public class Payout implements Constants
 {
+	private String winnerId;
 	private String label;
 	private int multiple;
 	private int maxMultiple;
@@ -19,31 +20,52 @@ public class Payout implements Constants, java.io.Serializable
 
 	/**
 	 * Constructor.
+	 * @param winnerId	  key to the win detection logic
+	 * @param multiple	  payout multiple 
 	 */
-	public Payout (String label, int multiple)
+	public Payout (String winnerId, int multiple)
 	{
-		this (label, multiple, multiple);
+		this (winnerId, multiple, multiple);
 	}
 
 	/**
 	 * Constructor.
+	 * @param winnerId	  key to the win detection logic
+	 * @param multiple	  payout multiple for other than maximum bet
+	 * @param maxMultiple payout multiple for maximum bet only
 	 */
-	public Payout (String label, int multiple, int maxMultiple)
+	public Payout (String winnerId, int multiple, int maxMultiple)
 	{
-		this.label = label;
+		this.winnerId = winnerId;
+		this.label = winnerId;
 		this.multiple = multiple;
 		this.maxMultiple = maxMultiple;
 	}
 
 	/**
-	 * Get this payout row's label, which (usually) identifies the 
-	 * winning poker hand, and primarily serves as a key into the 
-	 * Winner lookup table.
+	 * Get the key to this payout row's win detection logic.
+	 * @see net.ech.casino.videopoker.Winner
+	 */
+	public String getWinnerId ()
+	{
+		return winnerId;
+	}
+
+	/**
+	 * Get this payout row's label.	 Default is the winner id.
 	 * @return this payout row's label.
 	 */
 	public String getLabel ()
 	{
 		return label;
+	}
+
+	/**
+	 * Set this payout row's label.
+	 */
+	public void setLabel (String label)
+	{
+		this.label = label;
 	}
 
 	/**
