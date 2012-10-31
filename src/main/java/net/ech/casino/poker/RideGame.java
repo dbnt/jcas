@@ -16,7 +16,6 @@ import net.ech.casino.PokerScore;
  */
 public class RideGame extends TableGame implements CardConstants
 {
-
 	/**
 	 * This is five-card stud poker.  There is really only one hand, so just keep track of it that way.
 	 */
@@ -232,39 +231,39 @@ public class RideGame extends TableGame implements CardConstants
 
 	/**
 	 * Request the next deal.
-	 * @param player		the player
 	 * @param ante		  the amount bet on a sungle bet disk.
 	 */
-	public void deal (Player player, int ante)
+	public void deal (int ante)
 		throws CasinoException
 	{
-		new Deal (ante).play (player);
+		new Deal (ante).play ();
 	}
 
 	/**
 	 * The player has withdrawn a bet.
 	 * @param player		the player
 	 */
-	public void withdraw (Player player)
+	public void withdraw ()
 		throws CasinoException
 	{
-		new WithdrawOrLetItRide (true).play (player);
+		new WithdrawOrLetItRide (true).play ();
 	}
 
 	/**
 	 * The player has let it ride.
 	 * @param player				the player
 	 */
-	public void letItRide (Player player)
+	public void letItRide ()
 		throws CasinoException
 	{
-		new WithdrawOrLetItRide(false).play (player);
+		new WithdrawOrLetItRide(false).play ();
 	}
 
 	/**
 	 * Return true if the indicated Player can legally quit the game.
 	 */
-	public boolean isQuitLegal (Player player)
+	@Override
+	public boolean isQuitLegal (int seatIndex)
 	{
 		return state == DEAL_OK;
 	}
@@ -273,7 +272,7 @@ public class RideGame extends TableGame implements CardConstants
 	 * Return the amount that the indicated Player should be credited
 	 * if it leaves the game now.
 	 */
-	public Money getRedemptionAmount (Player player)
+	public Money getRedemptionAmount ()
 	{
 		// Return an amount equivalent to the player withdrawing for the remainder of the game.
 		return state == DEAL_OK ? null : new Money (getTotalBet() - ante);

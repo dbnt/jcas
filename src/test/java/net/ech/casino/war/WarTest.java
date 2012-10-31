@@ -255,12 +255,8 @@ public final class WarTest implements Constants
         Casino casino = new TestCasino (machine);
         WarGame game = new WarGame (casino, machine);
         game.setShoe (stackedShoe (machine, pCards, dCards));
-        // Until damned Player class goes away...
-        Player player = new Player ("test", game);
-        player.sitDown ();
-
+		game.seatPlayer("test");
         assertRoundCount(game, 0);
-
         return game;
     }
 
@@ -354,11 +350,6 @@ public final class WarTest implements Constants
 
     public static void assertQuitLegal (WarGame game, boolean expected)
     {
-        assertEquals(expected, game.isQuitLegal(game.getPlayer(0)));
-
-        if (game.isQuitLegal(game.getPlayer(0)))
-        {
-            assertMoneyEqual(Money.ZERO, game.getRedemptionAmount(game.getPlayer(0)));
-        }
+        assertEquals(expected, game.isQuitLegal(0));
     }
 }

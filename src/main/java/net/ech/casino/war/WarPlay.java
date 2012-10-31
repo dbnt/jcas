@@ -100,7 +100,7 @@ public abstract class WarPlay implements Constants
 	public final void activate ()
 		throws CasinoException
 	{
-		String seatedPlayerId = game.getPlayer(seatIndex).getAccountId();
+		String seatedPlayerId = game.getPlayerId(seatIndex);
 
 		if (!playerId.equals(seatedPlayerId))
 		{

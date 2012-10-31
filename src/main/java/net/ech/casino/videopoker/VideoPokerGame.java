@@ -209,13 +209,12 @@ public class VideoPokerGame extends CreditsGame implements Constants
 
 	/**
 	 * Deal.
-	 * @param player	the Player
 	 * @param bet		bet amount in credits
 	 */
-	public void deal (Player player, int bet)
+	public void deal (int bet)
 		throws CasinoException
 	{
-		new Deal (bet).play (player);
+		new Deal (bet).play ();
 	}
 
 	/**
@@ -227,7 +226,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 	 * @exception GameException if mask is invalid
 	 * @exception AccountingException error accessing accounting database
 	 */
-	public void draw (Player player, int mask)
+	public void draw (int mask)
 		throws CasinoException
 	{
 		if (mask < 0 || mask > 0x1f)
@@ -238,7 +237,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 		for (int i = 0; i < CardsInHand; ++i)
 			holds[i] = (mask & (1 << i)) == 0;
 
-		new Draw (holds).play (player);
+		new Draw (holds).play ();
 	}
 
 	/**
@@ -248,43 +247,44 @@ public class VideoPokerGame extends CreditsGame implements Constants
 	 * @exception GameException if holds array is invalid
 	 * @exception AccountingException error accessing accounting database
 	 */
-	private void draw (Player player, boolean[] holds)
+	private void draw (boolean[] holds)
 		throws CasinoException
 	{
-		new Draw ((boolean[]) holds.clone ()).play (player);
+		new Draw ((boolean[]) holds.clone ()).play ();
 	}
 
 	/**
 	 * Let's play double-up!
 	 */
-	public void doubleUp (Player player)
+	public void doubleUp ()
 		throws CasinoException
 	{
-		new DoubleUp ().play (player);
+		new DoubleUp ().play ();
 	}
 
 	/**
 	 * Finish a round of double-up.
 	 */
-	public void pick (Player player, int pick)
+	public void pick (int pick)
 		throws CasinoException
 	{
-		new Pick (pick).play (player);
+		new Pick (pick).play ();
 	}
 
 	/**
-	 * Return true if the indicated Player can legally quit the game.
+	 * Return true if the indicated player can legally quit the game.
 	 */
-	public boolean isQuitLegal (Player player)
+	@Override
+	public boolean isQuitLegal (int seatIndex)
 	{
 		return state == DealState;
 	}
 
 	/**
-	 * Return the amount that the indicated Player should be credited
+	 * Return the amount that the indicated player should be credited
 	 * if it leaves the game now.
 	 */
-	public Money getRedemptionAmount (Player player)
+	public Money getRedemptionAmount ()
 	{
 		//
 		// If game is closed in the middle of a winning hand, give the
@@ -375,7 +375,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 			setWin (0);
 
 			// Deal new cards.
-			cards = deal ();
+			cards = dealNew();
 			dealHand = copyCards (cards, CardsInHand);
 			drawHand = null;
 			holds = null;
@@ -470,7 +470,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 			setBet (getWin ());
 			setWin (0);
 
-			cards = deal (CardsInHand);
+			cards = dealNew(CardsInHand);
 
 			// Show only the house's card.
 			dealHand = new byte [] { cards[0] };
@@ -548,12 +548,12 @@ public class VideoPokerGame extends CreditsGame implements Constants
 	/**
 	 * Deal a new set of cards from the deck.
 	 */
-	protected byte[] deal ()
+	private byte[] dealNew ()
 	{
-		return deal (CardsInHand * 2);
+		return dealNew(CardsInHand * 2);
 	}
 
-	private byte[] deal (int n)
+	private byte[] dealNew (int n)
 	{
 		int nCardsInDeck = getVideoPokerMachine ().getCardsInDeck ();
 		Deck deck = new Deck (nCardsInDeck - CardsInStandardDeck);

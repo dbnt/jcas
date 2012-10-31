@@ -296,10 +296,10 @@ public class CaribGame extends TableGame implements CaribConstants
 	 * @param ante		  the original wager
 	 * @param drop		  the drop slot bet
 	 */
-	public void deal (Player player, int ante, int drop)
+	public void deal (int ante, int drop)
 		throws CasinoException
 	{
-		new Deal (ante, drop).play (player);
+		new Deal (ante, drop).play ();
 	}
 
 	/**
@@ -307,26 +307,27 @@ public class CaribGame extends TableGame implements CaribConstants
 	 * @param player		the player
 	 * @param hand		  the hand as a byte array
 	 */
-	public void call (Player player)
+	public void call ()
 		throws CasinoException
 	{
-		new Call ().play (player);
+		new Call ().play ();
 	}
 
 	/**
 	 * The player has folded.  Resolve the hand.
 	 * @param player				the player
 	 */
-	public void fold (Player player)
+	public void fold ()
 		throws CasinoException
 	{
-		new Fold ().play (player);
+		new Fold ().play ();
 	}
 
 	/**
-	 * Return true if the indicated Player can legally quit the game.
+	 * Return true if the indicated player can legally quit the game.
 	 */
-	public boolean isQuitLegal (Player player)
+	@Override
+	public boolean isQuitLegal (int seatIndex)
 	{
 		return dealOk;
 	}
@@ -335,7 +336,7 @@ public class CaribGame extends TableGame implements CaribConstants
 	 * Return the amount that the indicated Player should be credited
 	 * if it leaves the game now.
 	 */
-	public Money getRedemptionAmount (Player player)
+	public Money getRedemptionAmount ()
 	{
 		// Returning their ante is very generous.
 		return dealOk ? null : new Money (ante);

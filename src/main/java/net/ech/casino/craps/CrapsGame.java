@@ -188,23 +188,21 @@ public class CrapsGame extends TableGame implements Constants
 
 	/**
 	 * Bet on the next roll of the dice.
-	 * @param player		the player
 	 * @param newBets		 an array of bet values
 	 */
-	public void play (Player player, int[] newBets)
+	public void play (int[] newBets)
 		throws CasinoException
 	{
-		play (player, newBets, null);
+		play (newBets, null);
 	}
 
 	/**
 	 * Apply given dice values to the next roll, for testing.  This 
 	 * method fails
-	 * @param player   the player
 	 * @param newBets  an array of bet values
 	 * @param dice	   the die values to roll!
 	 */
-	public void play (Player player, int[] newBets, int[] dice)
+	public void play (int[] newBets, int[] dice)
 		throws CasinoException
 	{
 		if (dice != null && !getMachine ().isTestMode ())
@@ -339,9 +337,9 @@ public class CrapsGame extends TableGame implements Constants
 	}
 
 	/**
-	 * Return true if the indicated Player can legally quit the game.
+	 * Return true if the indicated player can legally quit the game.
 	 */
-	public boolean isQuitLegal (Player player)
+	public boolean isQuitLegal (int seatIndex)
 	{
 		for (int i = 0; i < remainingBets.length; ++i) {
 			if (remainingBets[i] > 0 && !canReduceBet (i)) {

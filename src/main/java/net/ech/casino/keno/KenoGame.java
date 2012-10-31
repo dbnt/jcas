@@ -87,10 +87,9 @@ public class KenoGame extends CreditsGame
 	/**
 	 * Play the game.  
 	 * (Insert description of parameter handling here.)
-	 * @param player		The player.
 	 * @param params		A parameter lookup table.
 	 */
-	public void play (Player player, Map params)
+	public void play (Map params)
 		throws CasinoException
 	{
 		// Get all way strings and b-way (way with specific bet amount) strings.
@@ -156,15 +155,14 @@ public class KenoGame extends CreditsGame
 			}
 		}
 
-		play (player, ways);
+		play (ways);
 	}
 
 	/**
 	 * Play the game.
-	 * @param player		The player.
 	 * @param newWays		 Array of ways.
 	 */
-	public void play (Player player, Way[] newWays)
+	public void play (Way[] newWays)
 		throws CasinoException
 	{
 		// Save state.

@@ -443,7 +443,7 @@ public class BlackjackGame extends TableGame implements Constants
 	/**
 	 * Request a deal.
 	 */
-	public void deal (Player player, final int bet)
+	public void deal (final int bet)
 		throws CasinoException
 	{
 		testBet (bet);
@@ -479,13 +479,13 @@ public class BlackjackGame extends TableGame implements Constants
 
 				updateState ();
 			}
-		}.play (player);
+		}.play ();
 	}
 
 	/**
 	 * Take a hit on the current hand.
 	 */
-	public void hit (Player player)
+	public void hit ()
 		throws CasinoException
 	{
 		new BlackjackPlay (Hit)
@@ -501,13 +501,13 @@ public class BlackjackGame extends TableGame implements Constants
 
 				updateState ();
 			}
-		}.play (player);
+		}.play ();
 	}
 
 	/**
 	 * Stand on the current hand.
 	 */
-	public void stand (Player player)
+	public void stand ()
 		throws CasinoException
 	{
 		new BlackjackPlay (Stand)
@@ -517,13 +517,13 @@ public class BlackjackGame extends TableGame implements Constants
 				++currentPlayerHand;
 				updateState ();
 			}
-		}.play (player);
+		}.play ();
 	}
 
 	/**
 	 * Double down on the current hand.
 	 */
-	public void doubledown (Player player)
+	public void doubledown ()
 		throws CasinoException
 	{
 		new BlackjackPlay (DoubleDown)
@@ -545,13 +545,13 @@ public class BlackjackGame extends TableGame implements Constants
 
 				updateState ();
 			}
-		}.play (player);
+		}.play ();
 	}
 
 	/**
 	 * Surrender.
 	 */
-	public void surrender (Player player)
+	public void surrender ()
 		throws CasinoException
 	{
 		new BlackjackPlay (Surrender)
@@ -568,13 +568,13 @@ public class BlackjackGame extends TableGame implements Constants
 				++currentPlayerHand;
 				updateState ();
 			}
-		}.play (player);
+		}.play ();
 	}
 
 	/**
 	 * Split the current hand.
 	 */
-	public void split (Player player)
+	public void split ()
 		throws CasinoException
 	{
 		new BlackjackPlay (Split)
@@ -611,13 +611,13 @@ public class BlackjackGame extends TableGame implements Constants
 
 				updateState ();
 			}
-		}.play (player);
+		}.play ();
 	}
 
 	/**
 	 * Buy insurance.
 	 */
-	public void insurance (Player player)
+	public void insurance ()
 		throws CasinoException
 	{
 		new BlackjackPlay (Insurance)
@@ -628,13 +628,14 @@ public class BlackjackGame extends TableGame implements Constants
 				setBetIncrease (originalBet / 2.0);
 				updateState ();
 			}
-		}.play (player);
+		}.play ();
 	}
 
 	/**
-	 * Return true if the indicated Player can legally quit the game.
+	 * Return true if the indicated player can legally quit the game.
 	 */
-	public boolean isQuitLegal (Player player)
+	@Override
+	public boolean isQuitLegal (int seatIndex)
 	{
 		return isDealOk ();
 	}
@@ -643,7 +644,7 @@ public class BlackjackGame extends TableGame implements Constants
 	 * Return the amount that the indicated Player should be credited
 	 * if it leaves the game now.
 	 */
-	public Money getRedemptionAmount (Player player)
+	public Money getRedemptionAmount ()
 	{
 		return new Money (isDealOk () ? 0 : originalBet);
 	}

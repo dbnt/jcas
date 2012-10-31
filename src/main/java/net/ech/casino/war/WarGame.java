@@ -67,7 +67,8 @@ public class WarGame extends TableGame implements Constants
 	/**
 	 * Framework method, deprecated.
 	 */
-	public boolean isQuitLegal (Player player) 
+	@Override
+	public boolean isQuitLegal (int seatIndex) 
 	{
 		return table.isClear() || table.isEndOfHand();
 	}
@@ -122,12 +123,12 @@ public class WarGame extends TableGame implements Constants
 	private String checkPlayer (int seatIndex)
 		throws GameException
 	{
-		Player player = getPlayer (seatIndex);
-		if (player == null)
+		String playerId = getPlayerId (seatIndex);
+		if (playerId == null)
 		{
 			throw new GameException ("No player in seat " + seatIndex, this);
 		}
-		return player.getAccountId();
+		return playerId;
 	}
 
 	//=======================================================================
@@ -165,7 +166,7 @@ public class WarGame extends TableGame implements Constants
 		// Everyone ante'd up?
 		for (int i = 0; i < model.getSeatCount(); ++i)
 		{
-			if (getPlayer(i) != null && model.getSeat(i).getAnte() == null)
+			if (getPlayerId(i) != null && model.getSeat(i).getAnte() == null)
 			{
 				return false;
 			}
@@ -190,7 +191,7 @@ public class WarGame extends TableGame implements Constants
 				// Player wins initial deal.
 				model.showTake (i, seat.getAnte().getAmount().multiply (2));
 				trans.addRefund ("ante", seat.getAnte());
-				trans.addWin ("ante", getPlayer(i).getAccountId(), seat.getAnte());
+				trans.addWin ("ante", getPlayerId(i), seat.getAnte());
 			}
 		}
 	}
@@ -212,7 +213,7 @@ public class WarGame extends TableGame implements Constants
 					model.showTake (i, 
 						tieBet.getAmount().multiply (TIE_PAYOUT_MULTIPLE + 1));
 					trans.addRefund ("tie", tieBet);
-					trans.addWin ("tie", getPlayer(i).getAccountId(),
+					trans.addWin ("tie", getPlayerId(i),
 						tieBet.getPurse(),
 						tieBet.getAmount().multiply (TIE_PAYOUT_MULTIPLE));
 				}
@@ -233,7 +234,7 @@ public class WarGame extends TableGame implements Constants
 
 		for (int i = 0; i < model.getSeatCount(); ++i)
 		{
-			if (getPlayer (i) != null && model.isTieAt (i))
+			if (getPlayerId(i) != null && model.isTieAt (i))
 			{
 				nTies += 1;
 				if (model.getSeat(i).getRaise() != null)
@@ -283,7 +284,7 @@ public class WarGame extends TableGame implements Constants
 				// If player won, account for the winnings.
 				if (take != null)
 				{
-					String playerId = getPlayer (i).getAccountId();
+					String playerId = getPlayerId(i);
 					trans.addRefund ("ante", ante);
 					trans.addRefund ("raise", ante);
 					trans.addWin ("raise", playerId, seat.getRaise().getPurse(), seat.getRaise().getAmount().multiply (payout - 2));
@@ -337,6 +338,7 @@ public class WarGame extends TableGame implements Constants
 	/**
 	 * Remove a player from the game.
 	 */
+	@Override
 	public void removePlayerAt (int seatIndex)
 	{
 		super.removePlayerAt (seatIndex);

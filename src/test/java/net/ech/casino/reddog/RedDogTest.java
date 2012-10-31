@@ -268,10 +268,7 @@ public final class RedDogTest implements Constants
         Shoe shoe = machine.createNewShoe ();
         shoe.setStackedCards (cards);
         game.setShoe (shoe);
-
-        // Until damned Player class goes away...
-        Player player = new Player ("test", game);
-        player.sitDown ();
+        game.seatPlayer("test");
         return game;
     }
 

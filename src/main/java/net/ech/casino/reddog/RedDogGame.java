@@ -67,7 +67,8 @@ public class RedDogGame extends TableGame implements Constants
 	/**
 	 * @inheritDoc
 	 */
-	public boolean isQuitLegal (Player player) 
+	@Override
+	public boolean isQuitLegal (int seatIndex) 
 	{
 		return table.getState() != TABLE_WORKING;
 	}
@@ -112,12 +113,12 @@ public class RedDogGame extends TableGame implements Constants
 	private String checkPlayer (int seatIndex)
 		throws GameException
 	{
-		Player player = getPlayer (seatIndex);
-		if (player == null)
+		String playerId = getPlayerId (seatIndex);
+		if (playerId == null)
 		{
 			throw new GameException ("No player in seat " + seatIndex, this);
 		}
-		return player.getAccountId();
+		return playerId;
 	}
 
 	//=======================================================================
@@ -298,7 +299,7 @@ public class RedDogGame extends TableGame implements Constants
 				// purse id should be sufficient!  what if the player
 				// quits mid-hand?
 
-				trans.addWin ("ante", getPlayer(i).getAccountId(), ante.getPurse(),
+				trans.addWin ("ante", getPlayerId(i), ante.getPurse(),
 							  ante.getAmount().multiply (PAY_FOR_TIE));
 
 				model.showTake (i, trans.getReturnAmount().add (
@@ -326,7 +327,7 @@ public class RedDogGame extends TableGame implements Constants
 				// Pay the ante either 1:1 or the multiple, depending on
 				// machine setting.
 				//
-				trans.addWin ("ante", getPlayer(i).getAccountId(), ante.getPurse(),
+				trans.addWin ("ante", getPlayerId(i), ante.getPurse(),
 					getRedDogMachine().isMultipleAppliedToAnte()
 						? ante.getAmount().multiply (payMultiple)
 						: ante.getAmount());
@@ -336,7 +337,7 @@ public class RedDogGame extends TableGame implements Constants
 				{
 					// Return their raise, and pay the multiple on it.
 					trans.addRefund ("raise", raise);
-					trans.addWin ("raise", getPlayer(i).getAccountId(), raise.getPurse(),
+					trans.addWin ("raise", getPlayerId(i), raise.getPurse(),
 								  raise.getAmount().multiply (payMultiple));
 				}
 
@@ -369,7 +370,7 @@ public class RedDogGame extends TableGame implements Constants
 
 		for (int i = 0; i < model.getNumberOfSeats(); ++i)
 		{
-			model.resetSeat (i, getPlayer(i) != null);
+			model.resetSeat (i, getPlayerId(i) != null);
 		}
 	}
 

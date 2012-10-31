@@ -24,7 +24,7 @@ public class AntePlay extends WarPlay
 	}
 
 	/**
-	 * Return true if this Player can ante at this time.
+	 * Return true if this player can ante at this time.
 	 */
 	public boolean isEnabled ()
 	{

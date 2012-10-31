@@ -22,53 +22,66 @@ import static org.junit.Assert.fail;
 public final class BlackjackTest implements Constants
 {
 	@Test
-    public void testPush ()
+    public void testPush1 ()
         throws Exception
     {
-        CasinoBlackjack machine = new CasinoBlackjack ();
-        BlackjackPlayer player = stackTheDeck (machine, "THAD", "AHTD");
-        player.deal (1);
-        testReturns (player, 1);
+        BlackjackGame game = stackTheDeck (new CasinoBlackjack(), "THAD", "AHTD");
+        game.deal (1);
+        testReturns (game, 1);
+	}
 
-        player = stackTheDeck (machine, "TH6H5H", "TD6D5D");
-        player.deal (1);
-        player.hit ();
-        testReturns (player, 1);
+	@Test
+    public void testPush2 ()
+        throws Exception
+    {
+        BlackjackGame game = stackTheDeck (new CasinoBlackjack(), "TH6H5H", "TD6D5D");
+        game.deal (1);
+        game.hit ();
+        testReturns (game, 1);
     }
 
 	@Test
-    public void testDealerHitsSoft17 ()
+    public void testDealerHitsSoft17AndWins ()
         throws Exception
     {
         CasinoBlackjack machine = new CasinoBlackjack ();
         machine.setDealerHitsSoft17 (true);
-        BlackjackPlayer player = stackTheDeck (machine, "THTD", "5HASAC4D");
-        player.deal (1);
-        player.stand ();
-        testReturns (player, 0);
+        BlackjackGame game = stackTheDeck (machine, "THTD", "5HASAC4D");
+        game.deal (1);
+        game.stand ();
+        testReturns (game, 0);
+	}
 
-        machine = new CasinoBlackjack ();
+	@Test
+    public void testDealerHitsSoft17AndLoses ()
+        throws Exception
+    {
+        CasinoBlackjack machine = new CasinoBlackjack ();
         machine.setDealerHitsSoft17 (false);
-        player = stackTheDeck (machine, "THTD", "5HASAC4D");
-        player.deal (1);
-        player.stand ();
-        testReturns (player, 2);
+        BlackjackGame game = stackTheDeck (machine, "THTD", "5HASAC4D");
+        game.deal (1);
+        game.stand ();
+        testReturns (game, 2);
     }
 
 	@Test
     public void testScoring ()
         throws Exception
     {
-        CasinoBlackjack machine = new CasinoBlackjack ();
-        BlackjackPlayer player = stackTheDeck (machine, "7H7S7D", "THJH");
-        player.deal (1);
-        player.hit ();
-        testReturns (player, 2);
+        BlackjackGame game = stackTheDeck (new CasinoBlackjack(), "7H7S7D", "THJH");
+        game.deal (1);
+        game.hit ();
+        testReturns (game, 2);
+	}
 
-        player = stackTheDeck (machine, "7S7H7C", "TH2H9S");
-        player.deal (1);
-        player.hit ();
-        testReturns (player, 1);
+	@Test
+    public void testScoring2 ()
+        throws Exception
+	{
+        BlackjackGame game = stackTheDeck (new CasinoBlackjack(), "7S7H7C", "TH2H9S");
+        game.deal (1);
+        game.hit ();
+        testReturns (game, 1);
     }
 
 	@Test
@@ -79,50 +92,50 @@ public final class BlackjackTest implements Constants
         machine.setMaximumBet (10);
 
         // Player loses insurance but wins hand.
-        BlackjackPlayer player = stackTheDeck (machine, "7H7S6D", "8HAH");
-        player.deal (2);
-        player.insurance();
-        player.hit();
-        player.stand();
-        testReturns (player, 4);
-        testInsuranceBet (player, 1);
-        testInsuranceWin (player, 0);
+        BlackjackGame game = stackTheDeck (machine, "7H7S6D", "8HAH");
+        game.deal (2);
+        game.insurance();
+        game.hit();
+        game.stand();
+        testReturns (game, 4);
+        testInsuranceBet (game, 1);
+        testInsuranceWin (game, 0);
 
         // Player loses insurance and loses hand.
-        player = stackTheDeck (machine, "7H7S3D", "9HAH");
-        player.deal (2);
-        player.insurance();
-        player.hit();
-        player.stand();
-        testReturns (player, 0);
-        testInsuranceBet (player, 1);
-        testInsuranceWin (player, 0);
+        game = stackTheDeck (machine, "7H7S3D", "9HAH");
+        game.deal (2);
+        game.insurance();
+        game.hit();
+        game.stand();
+        testReturns (game, 0);
+        testInsuranceBet (game, 1);
+        testInsuranceWin (game, 0);
 
         // Regression test for bug case.
-        player = stackTheDeck (machine, "7H7S3D", "ACAHTC9C");
-        player.deal (2);
-        player.insurance();
-        player.hit();         // hit was not allowed here!
-        player.stand();
-        testReturns (player, 0);
-        testInsuranceBet (player, 1);
-        testInsuranceWin (player, 0);
+        game = stackTheDeck (machine, "7H7S3D", "ACAHTC9C");
+        game.deal (2);
+        game.insurance();
+        game.hit();         // hit was not allowed here!
+        game.stand();
+        testReturns (game, 0);
+        testInsuranceBet (game, 1);
+        testInsuranceWin (game, 0);
 
         // Player wins insurance bet and loses hand.
-        player = stackTheDeck (machine, "7H7S7D", "THAH");
-        player.deal (4);
-        player.insurance();
-        testReturns (player, 0);
-        testInsuranceBet (player, 2);
-        testInsuranceWin (player, 6);
+        game = stackTheDeck (machine, "7H7S7D", "THAH");
+        game.deal (4);
+        game.insurance();
+        testReturns (game, 0);
+        testInsuranceBet (game, 2);
+        testInsuranceWin (game, 6);
 
         // Player wins insurance bet and hand pushes.
-        player = stackTheDeck (machine, "JHAD", "THAH");
-        player.deal (4);
-        player.insurance();
-        testReturns (player, 4);
-        testInsuranceBet (player, 2);
-        testInsuranceWin (player, 6);
+        game = stackTheDeck (machine, "JHAD", "THAH");
+        game.deal (4);
+        game.insurance();
+        testReturns (game, 4);
+        testInsuranceBet (game, 2);
+        testInsuranceWin (game, 6);
     }
 
 	@Test
@@ -130,28 +143,28 @@ public final class BlackjackTest implements Constants
         throws Exception
     {
         CasinoBlackjack machine = new Lucky777 (6);
-        BlackjackPlayer player = stackTheDeck (machine, "7H7S7D", "THJH");
-        player.deal (1);
-        player.hit ();
-        testReturns (player, 7);
+        BlackjackGame game = stackTheDeck (machine, "7H7S7D", "THJH");
+        game.deal (1);
+        game.hit ();
+        testReturns (game, 7);
 
-        player = stackTheDeck (machine, "7S7S7S", "THJH");
-        player.deal (1);
-        player.hit ();
-        testReturns (player, 8);
+        game = stackTheDeck (machine, "7S7S7S", "THJH");
+        game.deal (1);
+        game.hit ();
+        testReturns (game, 8);
 
-        player = stackTheDeck (machine, "7D7H7S", "TH2H9S");
-        player.deal (1);
-        player.hit ();
-        testReturns (player, 6);
+        game = stackTheDeck (machine, "7D7H7S", "TH2H9S");
+        game.deal (1);
+        game.hit ();
+        testReturns (game, 6);
 
-        player = stackTheDeck (machine, "7S7S7S", "TH2H9S");
-        player.deal (1);
-        player.hit ();
-        testReturns (player, 7);
+        game = stackTheDeck (machine, "7S7S7S", "TH2H9S");
+        game.deal (1);
+        game.hit ();
+        testReturns (game, 7);
     }
 
-    static BlackjackPlayer stackTheDeck (
+    static BlackjackGame stackTheDeck (
         BlackjackMachine machine,
         String playerCards,
         String dealerCards)
@@ -160,38 +173,37 @@ public final class BlackjackTest implements Constants
         Casino casino = new TestCasino (machine);
         BlackjackGame game = new BlackjackGame (casino, machine);
         game.setShoe(Utils.stackedShoe (machine, playerCards, dealerCards));
-        BlackjackPlayer player = new BlackjackPlayer ("test", game);
-        player.sitDown ();
-        return player;
+        assertTrue(game.seatPlayer("test"));
+        return game;
     }
 
     /**
      * Assert player gets expected amount.
      */
-    public static void testReturns (BlackjackPlayer player, int expected)
+    public static void testReturns (BlackjackGame game, int expected)
 		throws Exception
     {
-        assertTrue(player.getBlackjackGame().isDealOk());
-        assertEquals(expected, (int) (player.getBlackjackGame().getTotalReturn() + 0.5));
+        assertTrue(game.isDealOk());
+        assertEquals(expected, (int) (game.getTotalReturn() + 0.5));
     }
 
     /**
      * Assert insurance bet is as expected.
      */
-    public static void testInsuranceBet (BlackjackPlayer player, int expected)
+    public static void testInsuranceBet (BlackjackGame game, int expected)
 		throws Exception
     {
-        Money bet = player.getBlackjackGame().getInsuranceBet();
+        Money bet = game.getInsuranceBet();
 		assertEquals(expected, bet == null ? 0 : bet.intValue());
     }
 
     /**
      * Assert insurance win is as expected.
      */
-    public static void testInsuranceWin (BlackjackPlayer player, int expected)
+    public static void testInsuranceWin (BlackjackGame game, int expected)
 		throws Exception
     {
-        Money win = player.getBlackjackGame().getInsuranceWin();
+        Money win = game.getInsuranceWin();
 		assertEquals(expected, win == null ? 0 : win.intValue());
     }
 }

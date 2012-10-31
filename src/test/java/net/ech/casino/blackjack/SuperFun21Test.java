@@ -38,108 +38,161 @@ public final class SuperFun21Test implements Constants
     }
 
 	@Test
-    public void testSuperFun21 ()
+    public void testCanSplitAndDoubleSplitAces ()
         throws Exception
     {
-        // Test that player may double after a split.
-        // Test that player may double split aces.
-        BlackjackPlayer player = stackTheDeck ("ASAC3D3H7S7D", "2C6HTC");
-        player.deal (1);
-        player.split ();
-        player.doubledown ();
-        player.doubledown ();
+        BlackjackGame game = stackTheDeck ("ASAC3D3H7S7D", "2C6HTC");
+        game.deal (1);
+        game.split ();
+        game.doubledown ();
+        game.doubledown ();
+	}
 
-        // Test late surrender
-        player = stackTheDeck ("2SAC3D3H7S7D", "2C6HTC");
-        player.deal (1);
-        player.hit ();
-        player.hit ();
-        player.surrender ();
+	@Test
+    public void testLateSurrender ()
+        throws Exception
+    {
+        BlackjackGame game = stackTheDeck ("2SAC3D3H7S7D", "2C6HTC");
+        game.deal (1);
+        game.hit ();
+        game.hit ();
+        game.surrender ();
+	}
 
-        // Test late double-down.
-        // Test double-down rescue.
-        player = stackTheDeck ("2SAC3D3H7S7D", "2C6HTC");
-        player.deal (1);
-        player.hit ();
-        player.doubledown ();
-        player.surrender ();
+	@Test
+    public void testLateDoubleDownAndRescue ()
+        throws Exception
+    {
+        BlackjackGame game = stackTheDeck ("2SAC3D3H7S7D", "2C6HTC");
+        game.deal (1);
+        game.hit ();
+        game.doubledown ();
+        game.surrender ();
+	}
 
-        // Player blackjack in diamonds pays 2-1.
-        player = stackTheDeck ("TDAD", "6CTC5H");
-        player.deal (1);
-        testReturns (player, 3);
+	@Test
+    public void testPlayerBlackjackInDiamondsPays2to1 ()
+        throws Exception
+    {
+        BlackjackGame game = stackTheDeck ("TDAD", "6CTC5H");
+        game.deal (1);
+        testReturns (game, 3);
+	}
 
-        // Other blackjack pays only 1-1.
-        player = stackTheDeck ("TSAD", "6CTC5H");
-        player.deal (1);
-        testReturns (player, 2);
+	@Test
+    public void testNonDiamondBlackjackPays1to1 ()
+        throws Exception
+	{
+        BlackjackGame game = stackTheDeck ("TSAD", "6CTC5H");
+        game.deal (1);
+        testReturns (game, 2);
+	}
 
-        // Player hand consisting of 6 cards or more automatically wins.
-        player = stackTheDeck ("2C2D2H2S3H8H", "6CTC5H");
-        player.deal (1);
-        player.hit ();
-        player.hit ();
-        player.hit ();
-        player.hit ();
-        testReturns (player, 2);
-        player = stackTheDeck ("2C2D2H2S3H9H", "6CTC5H");
-        player.deal (1);
-        player.hit ();
-        player.hit ();
-        player.hit ();
-        player.hit ();
-        testReturns (player, 2);
+	@Test
+    public void testPlayerHandOf6CardsAutoWins1 ()
+        throws Exception
+	{
+        BlackjackGame game = stackTheDeck ("2C2D2H2S3H8H", "6CTC5H");
+        game.deal (1);
+        game.hit ();
+        game.hit ();
+        game.hit ();
+        game.hit ();
+        testReturns (game, 2);
+	}
 
-        // ...except after doubling.
-        player = stackTheDeck ("2C2D2H2S3H9H", "6CTC5H");
-        player.deal (1);
-        player.hit ();
-        player.hit ();
-        player.hit ();
-        player.doubledown ();
-        player.stand(); // don't rescue.
-        testReturns (player, 0);
-        player = stackTheDeck ("2C2D2H2S3H9H", "6CTC8H");
-        player.deal (1);
-        player.hit ();
-        player.hit ();
-        player.hit ();
-        player.doubledown ();
-        player.stand(); // don't rescue.
-        testReturns (player, 4);
-        player = stackTheDeck ("2C2D2H2S3H9H", "TC3C6H");
-        player.deal (1);
-        player.hit ();
-        player.hit ();
-        player.hit ();
-        player.doubledown ();
-        player.stand(); // don't rescue.
-        testReturns (player, 4);
+	@Test
+    public void testPlayerHandOf6CardsAutoWins2 ()
+        throws Exception
+	{
+        BlackjackGame game = stackTheDeck ("2C2D2H2S3H9H", "6CTC5H");
+        game.deal (1);
+        game.hit ();
+        game.hit ();
+        game.hit ();
+        game.hit ();
+        testReturns (game, 2);
+	}
 
-        // Player hand of 21, consisting of 5 cards or more, wins 2-1.
-        player = stackTheDeck ("2C2D2H5SJS", "6CTC5H");
-        player.deal (1);
-        player.hit ();
-        player.hit ();
-        player.hit ();
-        testReturns (player, 3);
+	@Test
+    public void testPlayerHandOf6CardsDoesntAutoWinAfterDouble ()
+        throws Exception
+	{
+        BlackjackGame game = stackTheDeck ("2C2D2H2S3H9H", "6CTC5H");
+        game.deal (1);
+        game.hit ();
+        game.hit ();
+        game.hit ();
+        game.doubledown ();
+        game.stand(); // don't rescue.
+        testReturns (game, 0);
+	}
 
-        // ...except after doubling.
-        player = stackTheDeck ("2C2D2H5SJS", "6CTC5H");
-        player.deal (1);
-        player.hit ();
-        player.hit ();
-        player.doubledown ();
-        testReturns (player, 2);
-        player = stackTheDeck ("2C2D2H5SJS", "6CTC3H");
-        player.deal (1);
-        player.hit ();
-        player.hit ();
-        player.doubledown ();
-        testReturns (player, 4);
+	@Test
+    public void testLateDoubleDownPayout1 ()
+        throws Exception
+	{
+        BlackjackGame game = stackTheDeck ("2C2D2H2S3H9H", "6CTC8H");
+        game.deal (1);
+        game.hit ();
+        game.hit ();
+        game.hit ();
+        game.doubledown ();
+        game.stand(); // don't rescue.
+        testReturns (game, 4);
+	}
+
+	@Test
+    public void testLateDoubleDownPayout2 ()
+        throws Exception
+	{
+        BlackjackGame game = stackTheDeck ("2C2D2H2S3H9H", "TC3C6H");
+        game.deal (1);
+        game.hit ();
+        game.hit ();
+        game.hit ();
+        game.doubledown ();
+        game.stand(); // don't rescue.
+        testReturns (game, 4);
+	}
+
+	@Test
+    public void test5Card21Pays2to1 ()
+        throws Exception
+	{
+        BlackjackGame game = stackTheDeck ("2C2D2H5SJS", "6CTC5H");
+        game.deal (1);
+        game.hit ();
+        game.hit ();
+        game.hit ();
+        testReturns (game, 3);
+	}
+
+	@Test
+    public void test5Card21PaysRegularAfterDoubling ()
+        throws Exception
+	{
+        BlackjackGame game = stackTheDeck ("2C2D2H5SJS", "6CTC5H");
+        game.deal (1);
+        game.hit ();
+        game.hit ();
+        game.doubledown ();
+        testReturns (game, 2);
+	}
+
+	@Test
+    public void testInstantLateDoubleDownPayout ()
+        throws Exception
+	{
+        BlackjackGame game = stackTheDeck ("2C2D2H5SJS", "6CTC3H");
+        game.deal (1);
+        game.hit ();
+        game.hit ();
+        game.doubledown ();
+        testReturns (game, 4);
     }
 
-    BlackjackPlayer stackTheDeck (
+    BlackjackGame stackTheDeck (
         String playerCards,
         String dealerCards)
         throws Exception
@@ -147,18 +200,17 @@ public final class SuperFun21Test implements Constants
         Casino casino = new TestCasino (machine);
         BlackjackGame game = new BlackjackGame (casino, machine);
         game.setShoe (Utils.stackedShoe (machine, playerCards, dealerCards));
-        BlackjackPlayer player = new BlackjackPlayer ("test", game);
-        player.sitDown ();
-        return player;
+        assertTrue(game.seatPlayer("test"));
+        return game;
     }
 
     /**
      * Assert player gets expected amount.
      */
-    public static void testReturns (BlackjackPlayer player, int expected)
+    public static void testReturns (BlackjackGame game, int expected)
 		throws Exception
     {
-        assertTrue(player.getBlackjackGame().isDealOk());
-        assertEquals(expected, (int) (player.getBlackjackGame().getTotalReturn() + 0.5));
+        assertTrue(game.isDealOk());
+        assertEquals(expected, (int) (game.getTotalReturn() + 0.5));
     }
 }

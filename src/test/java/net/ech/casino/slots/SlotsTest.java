@@ -29,9 +29,7 @@ public final class SlotsTest
         machine.setTestMode(true);
         casino = new TestCasino (machine);
         game = new SlotsGame (casino, machine);
-        // Until damned Player class goes away...
-        Player player = new Player ("test", game);
-        player.sitDown ();
+        game.seatPlayer("test");
 	}
 
 	@Test

@@ -138,7 +138,7 @@ public class TestCasino extends CasinoAdapter
 
 		TestCasino.this.lastTransaction = trans;
 
-		if (trans.getGame ().isQuitLegal (trans.getGame().getPlayer(0))) {
+		if (trans.getGame ().isQuitLegal (0)) {
 			tallyRound ();
 		}
 	}

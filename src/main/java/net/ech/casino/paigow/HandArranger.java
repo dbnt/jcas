@@ -761,7 +761,6 @@ class HandArranger implements Constants
 			switchCards(hand, cardIndex, lppos3, findCardIndex(cardIndex, 2));
 		}
 		else if (sh.isThreeOfAKind()) {
-			// System.out.println("Player has three-of-a-kind.");
 			// Always play three-of-a-kind in high hand except
 			// if it's three aces then put one of the aces into
 			// the low hand and the pair in the high hand.
@@ -948,7 +947,6 @@ class HandArranger implements Constants
 			// by an Ace, play the Ace in the low hand. All other combinations 
 			// split the pairs and play the lowest in the low hand.
 
-			// System.out.println("Player has two pair.");
 			int hpr = sh.getHighPairRank();
 			int lpr = sh.getLowPairRank();
 
@@ -1041,7 +1039,6 @@ class HandArranger implements Constants
 			// Always play the pair in the high hand and the highest
 			// ranking cards that aren't in the pair for the low hand.
 
-			// System.out.println("Player has a pair.");
 			// Find the position of the pair cards.
 			int pos1 = 0;
 			int pos2 = 0;

@@ -233,7 +233,7 @@ public class BaccaratGame extends TableGame implements Constants
 	 * Play the game.  (Baccarat is a one-step game for the purpose
 	 * of a client-server implementation).
 	 */
-	public void play (Player player, int playerBet,
+	public void play (int playerBet,
 					int bankBet, int tieBet,
 					boolean reshuffleRequested)
 		throws CasinoException

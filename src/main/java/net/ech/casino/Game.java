@@ -19,7 +19,7 @@ public abstract class Game
 	private String id;					// optional id
 	private Casino casino;
 	private Machine machine;	
-	private Player[] players;
+	private String[] playerIds;
 
 	/**
 	 * Constructor.
@@ -30,7 +30,7 @@ public abstract class Game
 	{
 		this.casino = casino;
 		this.machine = machine;
-		this.players = new Player [machine.getNumberOfSeats ()];
+		this.playerIds = new String [machine.getNumberOfSeats ()];
 	}
 
 	//=======================================================================
@@ -79,17 +79,17 @@ public abstract class Game
 	 */
 	public int getMaxPlayers ()
 	{
-		return players.length;
+		return playerIds.length;
 	}
 
 	/**
 	 * Get the player in seat #n.
-	 * @return the Player, may be null
+	 * @return the player ID, may be null
 	 * @exception ArrayBoundsException if n is an invalid index
 	 */
-	public Player getPlayer (int n)
+	public String getPlayerId (int n)
 	{
-		return players[n];
+		return playerIds[n];
 	}
 
 	/**
@@ -114,39 +114,26 @@ public abstract class Game
 	//=======================================================================
 
 	/**
-	 * Try to seat a Player at this Game.  
-	 * @param playerId	A player id.
-	 * @return true if the Player was seated, false if this Game is full.
-	 * @exception CasinoException		if an accounting error prevented
-	 *									the seating
-	 */
-	public boolean seatPlayer (String playerId)
-		throws CasinoException
-	{
-		return seatPlayer (new Player (playerId, this));
-	}
-
-	/**
-	 * Try to seat a Player at this Game.  
-	 * @param player	A Player
-	 * @return true if the Player was seated, false if this Game is full.
+	 * Try to seat a player at this Game.  
+	 * @param playerId	A player ID
+	 * @return true if the player was seated, false if this Game is full.
 	 * @exception AccountingException	if an accounting error prevented
 	 *									the seating
 	 */
-	public boolean seatPlayer (Player player)
+	public boolean seatPlayer (String playerId)
 		throws AccountingException
 	{
 		// If the player is already seated, ignore.
-		for (int i = 0; i < players.length; ++i) {
-			if (players[i] != null && players[i].getAccountId().equals(player.getAccountId())) {
+		for (int i = 0; i < playerIds.length; ++i) {
+			if (playerIds[i] != null && playerIds[i].equals(playerId)) {
 				return true;
 			}
 		}
 
 		// Find a seat for this player. 
-		for (int i = 0; i < players.length; ++i) {
-			if (players[i] == null) {
-				players[i] = player;
+		for (int i = 0; i < playerIds.length; ++i) {
+			if (playerIds[i] == null) {
+				playerIds[i] = playerId;
 				return true;
 			}
 		}
@@ -156,22 +143,21 @@ public abstract class Game
 	}
 
 	/**
-	 * Handle a Player's request to leave this Game entirely.
-	 * @param player	The Player
+	 * Handle a player's request to leave this Game entirely.
+	 * @param playerId	The player ID
 	 * @param code		System-specific code giving reason for close
-	 * @param force		If true, the Player leaves no matter what;
-	 *					if false, the Player leaves only if there
+	 * @param force		If true, the player leaves no matter what;
+	 *					if false, the player leaves only if there
 	 *					are no open bets.
 	 * @return true if the Player successfully left the game
 	 * @exception AccountingException	if an accounting error occurred
 	 */
-	public boolean quitPlayer (Player player, String code,
-											boolean force)
+	public boolean quitPlayer (String playerId, String code, boolean force)
 		throws AccountingException
 	{
-		for (int i = 0; i < players.length; ++i) {
-			if (players[i] != null && players[i].getAccountId().equals(player.getAccountId())) {
-				if (!force && !isQuitLegal (players[i])) 
+		for (int i = 0; i < playerIds.length; ++i) {
+			if (playerIds[i] != null && playerIds[i].equals(playerId)) {
+				if (!force && !isQuitLegal (i)) 
 					return false;
 				// Player is leaving.
 				removePlayerAt (i);
@@ -187,28 +173,15 @@ public abstract class Game
 	 */
 	public void removePlayerAt (int seatIndex)
 	{
-		players[seatIndex] = null;
+		playerIds[seatIndex] = null;
 	}
 
 	/**
-	 * Return true if the indicated Player can legally quit the game.
-	 * It is assumed that whenever isQuitLegal returns true, 
-	 * getRedemptionAmount returns zero (or null).
+	 * Return true if the indicated player can legally quit the game.
 	 */
-	public boolean isQuitLegal (Player player) 
+	public boolean isQuitLegal (int seatIndex) 
 	{
 		return true;
-	}
-
-	/**
-	 * Return the amount that the indicated Player should be credited
-	 * if it leaves the game now.
-	 * It is assumed that whenever isQuitLegal returns true, 
-	 * getRedemptionAmount returns zero (or null).
-	 */
-	public Money getRedemptionAmount (Player player)
-	{
-		return Money.ZERO;
 	}
 
 	/**
@@ -231,7 +204,7 @@ public abstract class Game
 	 */
 	public class GamePlay
 	{
-		public final void play (Player player)
+		public final void play ()
 			throws CasinoException
 		{
 			validate ();

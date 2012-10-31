@@ -22,7 +22,7 @@ public class AntePlay extends RedDogPlay
 	}
 
 	/**
-	 * Return true if this Player can ante at this time.
+	 * Return true if the player can ante at this time.
 	 */
 	public boolean isEnabled ()
 	{

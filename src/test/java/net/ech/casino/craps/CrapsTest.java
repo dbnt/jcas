@@ -22,7 +22,6 @@ import static org.junit.Assert.fail;
 public final class CrapsTest implements Constants
 {
 	CrapsGame game;
-	CrapsPlayer player;
 
 	@Before
 	public void setUp()
@@ -32,8 +31,6 @@ public final class CrapsTest implements Constants
         machine.setTestMode (true);
         Casino casino = new TestCasino (machine);
         game = new CrapsGame (casino, machine);
-        player = new CrapsPlayer ("test", game);
-        player.sitDown ();
 	}
 
     @Test
@@ -70,7 +67,7 @@ public final class CrapsTest implements Constants
         // Bet one on the pass line and roll whatever was specified.
         int[] bets = new int[PASS_LINE + 1];
         bets[PASS_LINE] = 1;
-        player.bet (bets, new int[] { die1, die2 });
+        game.play(bets, new int[] { die1, die2 });
 
         assertFalse(game.isOn());
         assertEquals(game.getDie0(), die1);
@@ -111,7 +108,7 @@ public final class CrapsTest implements Constants
         // Bet one on the pass line and roll whatever was specified.
         int[] bets = new int[PASS_LINE + 1];
         bets[PASS_LINE] = 1;
-        game.play (game.getPlayer(0), bets, new int[] { die1, die2 });
+        game.play (bets, new int[] { die1, die2 });
 
         assertEquals(game.getDie0(), die1);
 		assertEquals(game.getDie1(), die2);

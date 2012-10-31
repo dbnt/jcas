@@ -221,32 +221,30 @@ public class PaiGowGame extends TableGame implements Constants
 
 	/**
 	 * Request the next deal.
-	 * @param player		the player
 	 * @param bet		 the amount wagered
 	 */
-	public void deal(Player player, int bet)
+	public void deal(int bet)
 		throws CasinoException
 	{
-		new Deal (bet).play (player);
+		new Deal (bet).play ();
 	}
 
 	/**
 	 * Set the player hand according to the house strategy.
 	 * Don't play it yet.
 	 */
-	public void houseway (Player player)
+	public void houseway ()
 		throws CasinoException
 	{
-		new HouseWayPlay ().play (player);
+		new HouseWayPlay ().play ();
 	}
 
 	/**
 	 * The player has finished setting cards.  Resolve the hand.
-	 * @param player				the player
 	 * @param handString		 the hand as a string of card encodings,
 	 *								  separated by spaces
 	 */
-	public void play(Player player, String handString)
+	public void play(String handString)
 		throws CasinoException
 	{
 		byte[] bHand = new byte[CardsInHand]; 
@@ -270,7 +268,7 @@ public class PaiGowGame extends TableGame implements Constants
 		if (count != CardsInHand)
 			throw new GameException ("not enough cards: " + handString, this);
 
-		play (player, bHand);
+		play (bHand);
 	}
 
 	/**
@@ -278,16 +276,17 @@ public class PaiGowGame extends TableGame implements Constants
 	 * @param player		the player
 	 * @param hand		  the hand as a byte array
 	 */
-	public void play(Player player, byte[] hand)
+	public void play(byte[] hand)
 		throws CasinoException
 	{
-		new Resolve (hand).play (player);
+		new Resolve (hand).play ();
 	}
 
 	/**
 	 * Return true if the indicated Player can legally quit the game.
 	 */
-	public boolean isQuitLegal (Player player)
+	@Override
+	public boolean isQuitLegal (int seatIndex)
 	{
 		return dealOk;
 	}
@@ -296,7 +295,7 @@ public class PaiGowGame extends TableGame implements Constants
 	 * Return the amount that the indicated Player should be credited
 	 * if it leaves the game now.
 	 */
-	public Money getRedemptionAmount (Player player)
+	public Money getRedemptionAmount ()
 	{
 		return dealOk ? null : new Money (bet);
 	}

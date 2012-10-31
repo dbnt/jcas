@@ -202,11 +202,10 @@ public class RouletteGame extends TableGame implements Constants
 
 	/**
 	 * Spin the wheel.
-	 * @param player		The player.
 	 * @param amounts		 Bet amounts.
 	 * @param points		Bet position masks.
 	 */
-	public void spin (Player player, int[] amounts, long[] points)
+	public void spin (int[] amounts, long[] points)
 		throws CasinoException
 	{
 		// Validate.
