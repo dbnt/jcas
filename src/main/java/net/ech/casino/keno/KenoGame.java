@@ -164,7 +164,7 @@ public class KenoGame extends CreditsGame
 	 * @param player		The player.
 	 * @param newWays		 Array of ways.
 	 */
-	public synchronized void play (Player player, Way[] newWays)
+	public void play (Player player, Way[] newWays)
 		throws CasinoException
 	{
 		// Save state.

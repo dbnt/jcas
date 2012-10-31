@@ -206,7 +206,7 @@ public class RouletteGame extends TableGame implements Constants
 	 * @param amounts		 Bet amounts.
 	 * @param points		Bet position masks.
 	 */
-	public synchronized void spin (Player player, int[] amounts, long[] points)
+	public void spin (Player player, int[] amounts, long[] points)
 		throws CasinoException
 	{
 		// Validate.

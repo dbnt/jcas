@@ -254,7 +254,7 @@ public class SlotsGame extends CreditsGame
 	 * @param assertCharged	 true if client thinks game is charged up
 	 * @param testPayouts	 true to enable pay table testing
 	 */
-	public synchronized void pull (
+	public void pull (
 		int bet,
 		boolean assertCharged,
 		boolean testPayouts

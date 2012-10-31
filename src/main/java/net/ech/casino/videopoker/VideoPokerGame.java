@@ -212,7 +212,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 	 * @param player	the Player
 	 * @param bet		bet amount in credits
 	 */
-	public synchronized void deal (Player player, int bet)
+	public void deal (Player player, int bet)
 		throws CasinoException
 	{
 		new Deal (bet).play (player);
@@ -248,7 +248,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 	 * @exception GameException if holds array is invalid
 	 * @exception AccountingException error accessing accounting database
 	 */
-	private synchronized void draw (Player player, boolean[] holds)
+	private void draw (Player player, boolean[] holds)
 		throws CasinoException
 	{
 		new Draw ((boolean[]) holds.clone ()).play (player);
@@ -257,7 +257,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 	/**
 	 * Let's play double-up!
 	 */
-	public synchronized void doubleUp (Player player)
+	public void doubleUp (Player player)
 		throws CasinoException
 	{
 		new DoubleUp ().play (player);
@@ -266,7 +266,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 	/**
 	 * Finish a round of double-up.
 	 */
-	public synchronized void pick (Player player, int pick)
+	public void pick (Player player, int pick)
 		throws CasinoException
 	{
 		new Pick (pick).play (player);
@@ -275,7 +275,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 	/**
 	 * Return true if the indicated Player can legally quit the game.
 	 */
-	public synchronized boolean isQuitLegal (Player player)
+	public boolean isQuitLegal (Player player)
 	{
 		return state == DealState;
 	}
@@ -284,7 +284,7 @@ public class VideoPokerGame extends CreditsGame implements Constants
 	 * Return the amount that the indicated Player should be credited
 	 * if it leaves the game now.
 	 */
-	public synchronized Money getRedemptionAmount (Player player)
+	public Money getRedemptionAmount (Player player)
 	{
 		//
 		// If game is closed in the middle of a winning hand, give the

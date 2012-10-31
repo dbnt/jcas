@@ -392,7 +392,7 @@ public class BlackjackGame extends TableGame implements Constants
 	/**
 	 * Register a card listener (counter).
 	 */
-	public synchronized void addCardListener (CardListener listener)
+	public void addCardListener (CardListener listener)
 		throws java.util.TooManyListenersException
 	{
 		if (cardListener != null)
@@ -403,7 +403,7 @@ public class BlackjackGame extends TableGame implements Constants
 	/**
 	 * Unregister a card listener (counter).
 	 */
-	public synchronized void removeCardListener (CardListener listener)
+	public void removeCardListener (CardListener listener)
 	{
 		if (cardListener == listener)
 			this.cardListener = null;
@@ -411,7 +411,6 @@ public class BlackjackGame extends TableGame implements Constants
 
 	private void fireCardShown (byte cardValue)
 	{
-		// Avoid synchronizing.
 		CardListener cardListener = this.cardListener;
 		if (cardListener != null)
 			cardListener.cardShown (new CardEvent (this, cardValue));
@@ -419,7 +418,6 @@ public class BlackjackGame extends TableGame implements Constants
 
 	private void fireShuffle ()
 	{
-		// Avoid synchronizing.
 		CardListener cardListener = this.cardListener;
 		if (cardListener != null)
 			cardListener.shuffle (new CardEvent (this));
@@ -433,7 +431,7 @@ public class BlackjackGame extends TableGame implements Constants
 	 * Clear the cards from the table.	This is an administrative function
 	 * (not player function) that be done only between hands.
 	 */
-	public synchronized void clearTable ()
+	public void clearTable ()
 		throws CasinoException
 	{
 		if (!isDealOk ())
@@ -445,7 +443,7 @@ public class BlackjackGame extends TableGame implements Constants
 	/**
 	 * Request a deal.
 	 */
-	public synchronized void deal (Player player, final int bet)
+	public void deal (Player player, final int bet)
 		throws CasinoException
 	{
 		testBet (bet);
@@ -487,7 +485,7 @@ public class BlackjackGame extends TableGame implements Constants
 	/**
 	 * Take a hit on the current hand.
 	 */
-	public synchronized void hit (Player player)
+	public void hit (Player player)
 		throws CasinoException
 	{
 		new BlackjackPlay (Hit)
@@ -509,7 +507,7 @@ public class BlackjackGame extends TableGame implements Constants
 	/**
 	 * Stand on the current hand.
 	 */
-	public synchronized void stand (Player player)
+	public void stand (Player player)
 		throws CasinoException
 	{
 		new BlackjackPlay (Stand)
@@ -525,7 +523,7 @@ public class BlackjackGame extends TableGame implements Constants
 	/**
 	 * Double down on the current hand.
 	 */
-	public synchronized void doubledown (Player player)
+	public void doubledown (Player player)
 		throws CasinoException
 	{
 		new BlackjackPlay (DoubleDown)
@@ -553,7 +551,7 @@ public class BlackjackGame extends TableGame implements Constants
 	/**
 	 * Surrender.
 	 */
-	public synchronized void surrender (Player player)
+	public void surrender (Player player)
 		throws CasinoException
 	{
 		new BlackjackPlay (Surrender)
@@ -576,7 +574,7 @@ public class BlackjackGame extends TableGame implements Constants
 	/**
 	 * Split the current hand.
 	 */
-	public synchronized void split (Player player)
+	public void split (Player player)
 		throws CasinoException
 	{
 		new BlackjackPlay (Split)
@@ -619,7 +617,7 @@ public class BlackjackGame extends TableGame implements Constants
 	/**
 	 * Buy insurance.
 	 */
-	public synchronized void insurance (Player player)
+	public void insurance (Player player)
 		throws CasinoException
 	{
 		new BlackjackPlay (Insurance)
@@ -645,7 +643,7 @@ public class BlackjackGame extends TableGame implements Constants
 	 * Return the amount that the indicated Player should be credited
 	 * if it leaves the game now.
 	 */
-	public synchronized Money getRedemptionAmount (Player player)
+	public Money getRedemptionAmount (Player player)
 	{
 		return new Money (isDealOk () ? 0 : originalBet);
 	}

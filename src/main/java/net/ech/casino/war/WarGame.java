@@ -337,7 +337,7 @@ public class WarGame extends TableGame implements Constants
 	/**
 	 * Remove a player from the game.
 	 */
-	public synchronized void removePlayerAt (int seatIndex)
+	public void removePlayerAt (int seatIndex)
 	{
 		super.removePlayerAt (seatIndex);
 		table.clearPlayerBets (seatIndex);

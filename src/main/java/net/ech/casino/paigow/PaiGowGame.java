@@ -224,7 +224,7 @@ public class PaiGowGame extends TableGame implements Constants
 	 * @param player		the player
 	 * @param bet		 the amount wagered
 	 */
-	public synchronized void deal(Player player, int bet)
+	public void deal(Player player, int bet)
 		throws CasinoException
 	{
 		new Deal (bet).play (player);
@@ -234,7 +234,7 @@ public class PaiGowGame extends TableGame implements Constants
 	 * Set the player hand according to the house strategy.
 	 * Don't play it yet.
 	 */
-	public synchronized void houseway (Player player)
+	public void houseway (Player player)
 		throws CasinoException
 	{
 		new HouseWayPlay ().play (player);
@@ -278,7 +278,7 @@ public class PaiGowGame extends TableGame implements Constants
 	 * @param player		the player
 	 * @param hand		  the hand as a byte array
 	 */
-	public synchronized void play(Player player, byte[] hand)
+	public void play(Player player, byte[] hand)
 		throws CasinoException
 	{
 		new Resolve (hand).play (player);
@@ -287,7 +287,7 @@ public class PaiGowGame extends TableGame implements Constants
 	/**
 	 * Return true if the indicated Player can legally quit the game.
 	 */
-	public synchronized boolean isQuitLegal (Player player)
+	public boolean isQuitLegal (Player player)
 	{
 		return dealOk;
 	}
@@ -296,7 +296,7 @@ public class PaiGowGame extends TableGame implements Constants
 	 * Return the amount that the indicated Player should be credited
 	 * if it leaves the game now.
 	 */
-	public synchronized Money getRedemptionAmount (Player player)
+	public Money getRedemptionAmount (Player player)
 	{
 		return dealOk ? null : new Money (bet);
 	}

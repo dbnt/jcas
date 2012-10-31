@@ -191,7 +191,7 @@ public class CrapsGame extends TableGame implements Constants
 	 * @param player		the player
 	 * @param newBets		 an array of bet values
 	 */
-	public synchronized void play (Player player, int[] newBets)
+	public void play (Player player, int[] newBets)
 		throws CasinoException
 	{
 		play (player, newBets, null);
@@ -204,7 +204,7 @@ public class CrapsGame extends TableGame implements Constants
 	 * @param newBets  an array of bet values
 	 * @param dice	   the die values to roll!
 	 */
-	public synchronized void play (Player player, int[] newBets, int[] dice)
+	public void play (Player player, int[] newBets, int[] dice)
 		throws CasinoException
 	{
 		if (dice != null && !getMachine ().isTestMode ())
@@ -290,7 +290,7 @@ public class CrapsGame extends TableGame implements Constants
 	 * with the rules for craps betting, that is, bets which are
 	 * frozen remain and no bet exceeds the limit.
 	 */
-	public synchronized void checkBets (int[] newBets)
+	public void checkBets (int[] newBets)
 		throws GameException
 	{
 		int length = Math.max (newBets.length, remainingBets.length);
@@ -341,7 +341,7 @@ public class CrapsGame extends TableGame implements Constants
 	/**
 	 * Return true if the indicated Player can legally quit the game.
 	 */
-	public synchronized boolean isQuitLegal (Player player)
+	public boolean isQuitLegal (Player player)
 	{
 		for (int i = 0; i < remainingBets.length; ++i) {
 			if (remainingBets[i] > 0 && !canReduceBet (i)) {

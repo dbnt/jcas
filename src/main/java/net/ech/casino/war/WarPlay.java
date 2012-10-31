@@ -100,39 +100,35 @@ public abstract class WarPlay implements Constants
 	public final void activate ()
 		throws CasinoException
 	{
-		// All plays are synchronized!
-		synchronized (game)
+		String seatedPlayerId = game.getPlayer(seatIndex).getAccountId();
+
+		if (!playerId.equals(seatedPlayerId))
 		{
-			String seatedPlayerId = game.getPlayer(seatIndex).getAccountId();
-
-			if (!playerId.equals(seatedPlayerId))
-			{
-				throw new CasinoException ("player id mismatch!");
-			}
-
-			if (!isEnabled())
-			{
-				throw new IllegalPlayException (game);
-			}
-
-			// Get a working copy of the table.
-			WarModel workingModel = game.copyModel();
-
-			// Open a new transaction.
-			Transaction workingTrans = new Transaction (game);
-			
-			// Execute player changes to the model; build up the transaction.
-			this.execute (workingModel, workingTrans);
-
-			// Let the house respond.
-			game.runDealer (workingModel, workingTrans);
-				
-			// Record the transaction.
-			game.executeTransaction (workingModel, workingTrans);
-
-			// Do any post-transaction cleanup called for.
-			cleanup ();
+			throw new CasinoException ("player id mismatch!");
 		}
+
+		if (!isEnabled())
+		{
+			throw new IllegalPlayException (game);
+		}
+
+		// Get a working copy of the table.
+		WarModel workingModel = game.copyModel();
+
+		// Open a new transaction.
+		Transaction workingTrans = new Transaction (game);
+		
+		// Execute player changes to the model; build up the transaction.
+		this.execute (workingModel, workingTrans);
+
+		// Let the house respond.
+		game.runDealer (workingModel, workingTrans);
+			
+		// Record the transaction.
+		game.executeTransaction (workingModel, workingTrans);
+
+		// Do any post-transaction cleanup called for.
+		cleanup ();
 	}
 
 	/**

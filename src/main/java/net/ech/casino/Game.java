@@ -120,7 +120,7 @@ public abstract class Game
 	 * @exception CasinoException		if an accounting error prevented
 	 *									the seating
 	 */
-	public synchronized boolean seatPlayer (String playerId)
+	public boolean seatPlayer (String playerId)
 		throws CasinoException
 	{
 		return seatPlayer (new Player (playerId, this));
@@ -133,7 +133,7 @@ public abstract class Game
 	 * @exception AccountingException	if an accounting error prevented
 	 *									the seating
 	 */
-	public synchronized boolean seatPlayer (Player player)
+	public boolean seatPlayer (Player player)
 		throws AccountingException
 	{
 		// If the player is already seated, ignore.
@@ -165,7 +165,7 @@ public abstract class Game
 	 * @return true if the Player successfully left the game
 	 * @exception AccountingException	if an accounting error occurred
 	 */
-	public synchronized boolean quitPlayer (Player player, String code,
+	public boolean quitPlayer (Player player, String code,
 											boolean force)
 		throws AccountingException
 	{
@@ -185,7 +185,7 @@ public abstract class Game
 	/**
 	 * Remove a player from the game.  Just do it.	No screwing around.
 	 */
-	public synchronized void removePlayerAt (int seatIndex)
+	public void removePlayerAt (int seatIndex)
 	{
 		players[seatIndex] = null;
 	}
@@ -225,7 +225,7 @@ public abstract class Game
 
 	/**
 	 * Base class, or at least a source code template, for game play
-	 * methods.	 All game play methods must synchronize on the Game.
+	 * methods.
 	 * A bug in the Java 1.1 runtime prevents this class from being
 	 * declared with protected access.
 	 */

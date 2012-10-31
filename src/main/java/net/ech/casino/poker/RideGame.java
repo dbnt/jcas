@@ -235,7 +235,7 @@ public class RideGame extends TableGame implements CardConstants
 	 * @param player		the player
 	 * @param ante		  the amount bet on a sungle bet disk.
 	 */
-	public synchronized void deal (Player player, int ante)
+	public void deal (Player player, int ante)
 		throws CasinoException
 	{
 		new Deal (ante).play (player);
@@ -245,7 +245,7 @@ public class RideGame extends TableGame implements CardConstants
 	 * The player has withdrawn a bet.
 	 * @param player		the player
 	 */
-	public synchronized void withdraw (Player player)
+	public void withdraw (Player player)
 		throws CasinoException
 	{
 		new WithdrawOrLetItRide (true).play (player);
@@ -255,7 +255,7 @@ public class RideGame extends TableGame implements CardConstants
 	 * The player has let it ride.
 	 * @param player				the player
 	 */
-	public synchronized void letItRide (Player player)
+	public void letItRide (Player player)
 		throws CasinoException
 	{
 		new WithdrawOrLetItRide(false).play (player);
@@ -264,7 +264,7 @@ public class RideGame extends TableGame implements CardConstants
 	/**
 	 * Return true if the indicated Player can legally quit the game.
 	 */
-	public synchronized boolean isQuitLegal (Player player)
+	public boolean isQuitLegal (Player player)
 	{
 		return state == DEAL_OK;
 	}
@@ -273,7 +273,7 @@ public class RideGame extends TableGame implements CardConstants
 	 * Return the amount that the indicated Player should be credited
 	 * if it leaves the game now.
 	 */
-	public synchronized Money getRedemptionAmount (Player player)
+	public Money getRedemptionAmount (Player player)
 	{
 		// Return an amount equivalent to the player withdrawing for the remainder of the game.
 		return state == DEAL_OK ? null : new Money (getTotalBet() - ante);
