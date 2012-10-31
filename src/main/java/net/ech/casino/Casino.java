@@ -5,18 +5,13 @@
 package net.ech.casino;
 
 /**
- * A Casino provides essential services to Games.
+ * A Casino provides essential services to Games, including randomization and accounting.
  * 
  * @version 1.2
  * @author James Echmalian, ech@ech.net
  */
 public interface Casino 
 {
-	/**
-	 * Get the default random number generator of this casino.
-	 */
-	public Randomizer getRandomizer();
-
 	/**
 	 * Get the random number generator to use in the given Game.
 	 * @return a Randomizer

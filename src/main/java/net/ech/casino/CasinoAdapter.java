@@ -6,6 +6,8 @@ package net.ech.casino;
 
 /**
  * A Casino is the source of casino-wide services.	
+ *
+ * Implementation must be synchronized.
  * 
  * @version 1.2
  * @author James Echmalian, ech@ech.net
@@ -23,20 +25,12 @@ public class CasinoAdapter implements Casino
 	}
 
 	/**
-	 * Get the default random number generator of this casino.
-	 * @return a Randomizer
-	 */
-	public Randomizer getRandomizer()
-	{
-		return randomizer;
-	}
-
-	/**
 	 * Get the random number generator to use in the given Game.
+	 * @return a Randomizer
 	 */
 	public Randomizer getRandomizer (Game game)
 	{
-		return getRandomizer();
+		return randomizer;
 	}
 
 	/**
