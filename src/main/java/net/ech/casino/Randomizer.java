@@ -4,7 +4,7 @@
 
 package net.ech.casino;
 
-import java.util.*;
+import net.ech.math.*;
 
 /**
  * Class Randomizer wraps a standard Java random number 
@@ -21,7 +21,7 @@ import java.util.*;
 public class Randomizer
 {
 	// the internal generator
-	private java.util.Random generator;
+	private RandomNumberGenerator generator;
 
 	/**
 	 * Constructor.	 Set the internal generator to an instance of
@@ -29,7 +29,7 @@ public class Randomizer
 	 */
 	public Randomizer ()
 	{
-		this (new java.util.Random ());
+		this (new LinearCongruentialGenerator());
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class Randomizer
 	 * instance.
 	 * @param generator a random number generator
 	 */
-	public Randomizer (java.util.Random generator)
+	public Randomizer (RandomNumberGenerator generator)
 	{
 		setGenerator (generator);
 	}
@@ -46,7 +46,7 @@ public class Randomizer
 	 * Set the internal random number generator.
 	 * @param generator a random number generator
 	 */
-	public void setGenerator (java.util.Random generator)
+	public void setGenerator (RandomNumberGenerator generator)
 	{
 		this.generator = generator;
 	}
@@ -156,28 +156,6 @@ public class Randomizer
 			byte temp = cards[index];
 			cards[index] = cards[i];
 			cards[i] = temp;
-		}
-	}
-
-	/**
-	 * Sanity check driver.
-	 */
-	public static void main (String[] args)
-	{
-		try
-		{
-			Randomizer rand = new Randomizer ();
-
-			int c;
-			while ((c = System.in.read ()) >= 0)
-			{
-				if (c == '\n')
-					System.out.println (rand.roll (2, 53));
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace (System.err);
 		}
 	}
 }
