@@ -1,4 +1,4 @@
-# interx project Makefile
+# jcas project Makefile
 
 all:
 	(cd core; make all)

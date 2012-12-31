@@ -1,6 +1,7 @@
 package models;
 
 import java.util.*;
+import net.ech.casino.videopoker.*;
 import play.data.validation.Constraints.*;
 
 public class Task {
@@ -8,6 +9,8 @@ public class Task {
 
 	@Required
 	public String label;
+
+	public VideoPokerMachine vpMachine;
 
 	public static long lastId = 0;
 	public static Map<Long,Task> lookup = new HashMap<Long,Task>();
