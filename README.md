@@ -3,5 +3,4 @@ jcas
 
 Java Casino Game Library
 
-TODO: port unit tests
-
+Reference app requires play framework: http://www.playframework.org/

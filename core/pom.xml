@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-    <groupId>net.ech</groupId>
-    <artifactId>jcas</artifactId>
-	<version>1.0</version>
+    <groupId>net.ech.jcas</groupId>
+    <artifactId>core</artifactId>
+	<version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Java Casino Game Library</name>
 	<dependencies>
