@@ -4,31 +4,18 @@
 
 package net.ech.casino.videopoker;
 
-import net.ech.casino.CardConstants;
-
 /**
  * Constants for Video Poker.
- * 
- * @version 1.1
- * @author James Echmalian, ech@ech.net
  */
-public interface Constants extends CardConstants
+public interface Constants
 {
-	public final static int CardsInHand = 5;
+	public final static int NUMBER_OF_RANKS = 13;
+	public final static int NUMBER_OF_SUITS = 4;
+	public final static int CARDS_IN_HAND = 5;
 
-	/**
-	 * Game state constants.
-	 * DealState: waiting for player to bet/deal
-	 * DrawState: waiting for player to hold/draw
-	 * PickState: waiting for player to pick a card (hi/lo)
-	 */
-	public static final int DealState = 1;
-	public static final int DrawState = 2;
-	public static final int PickState = 3;
-
-	/**
-	 * Special grade values.
-	 * NoGrade: a losing hand
-	 */
-	public static final int NoGrade = -1;
+	public final static String RANKS_STRING = "23456789TJQKA";
+	public final static String RANK_CHARS = RANKS_STRING.getChars();
+	public final static String SUITS_STRING = "DCHS";
+	public final static String SUIT_CHARS = SUITS_STRING.getChars();
+	public final static String JOKER_STRING = "jo";
 }

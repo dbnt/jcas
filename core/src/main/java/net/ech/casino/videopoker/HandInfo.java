@@ -1,148 +1,57 @@
 //
-// HandInfo.java  
+// HandInfo.java
 // 
 
 package net.ech.casino.videopoker;
 
-import net.ech.casino.Card;
-
 /**
  * A HandInfo object is a digested video poker hand.
- * 
- * @version 1.1
- * @author James Echmalian, ech@ech.net
  */
-public class HandInfo implements Constants
+public class HandInfo
+	implements Constants
 {
-	private byte[] hand;
+	private String hand;
 	private int wildCount;
-	private int lowRank = -1;
-	private int highRank = -1;
-	private int highPairRank = -1;
-	private int[] tupleCounts = new int [3];
-	private byte flushSuit = NilSuit;
-	private boolean straightFlag;
-	private boolean deucesWild;
+	private String rankCounts = "";
+	private String uniqueSuits = "";
 
 	//
 	// Constructor.	 This pre-computes the results of all the queries.
 	//
-	public HandInfo (byte[] hand, boolean deucesWild)
+	public HandInfo (String hand, CardPattern wildCardPattern)
 	{
-		// Save a copy of the original hand.
 		this.hand = hand;
 
-		int[] ranks = new int [CardsInHand];
-		int rankCount = 0;
-		this.deucesWild = deucesWild;
-		//
-		// Rank the cards, sorting out the wild cards.
-		// Detect flush.
-		//
-		boolean isFlush = true;
-		byte firstSuit = NilSuit;
-		for (int i = 0; i < CardsInHand; ++i)
-		{
-			if (!isWild (hand[i]))
-			{
-				int rank = Card.rankOf (hand[i]);
-				ranks[rankCount] = rank;
-				++rankCount;
+		int[] rankCounts = new int[NUMBER_OF_RANKS];
+		int[] suitCounts = new int[NUMBER_OF_SUITS];
 
-				byte suit = Card.suitOf (hand[i]);
-				if (firstSuit == NilSuit)
-				{
-					firstSuit = suit;
-				}
-				else if (suit != firstSuit)
-				{
-					isFlush = false;
-				}
+		// Decompose the hand into its rank and suit counts.
+		for (int i = 0; i < CARDS_IN_HAND; ++i) {
+			char rank = hand.charAt(i * 2);
+			char suit = hand.charAt(i * 2 + 1);
+			if (rank == JOKER_RANK || wildCardPattern.matches(rank, suit)) {
+				++wildCount;
 			}
-		}
-		if (isFlush)
-		{
-			this.flushSuit = firstSuit;
-		}
-
-		//
-		// Sort the ranks.
-		//
-		for (int i = 1; i < rankCount; ++i)
-		{
-			for (int j = 1; j < rankCount; ++j)
-			{
-				if (ranks[j - 1] > ranks[j])
-				{
-					int temp = ranks[j - 1];
-					ranks[j - 1] = ranks[j];
-					ranks[j] = temp;
-				}
+			else {
+				rankCounts[RANKS_STRING.indexOf(rank)] += 1;
+				suitCounts[SUITS_STRING.indexOf(suit)] += 1;
 			}
 		}
 
-		//
-		// Remember number of wild cards, high and low ranks.
-		//
-		this.wildCount = CardsInHand - rankCount;
-		if (rankCount > 0)
-		{
-			this.lowRank = ranks[0];
-			this.highRank = ranks[rankCount - 1];
+		for (int i = 0; i < rankCounts.length; ++i) {
+			this.rankCounts += (char)('0' + rankCounts[i]);
 		}
 
-		//
-		// Count natural pairs, triples, quads.
-		// Remember the rank of the high pair.
-		//
-		for (int sep = 3; sep > 0; --sep)
-		{
-			for (int i = 0; (i + sep) < rankCount; ++i)
-			{
-				if (ranks[i] == ranks[i + sep])
-				{
-					this.tupleCounts[sep - 1] += 1;
-					this.highPairRank = ranks[i];
-				}
+		for (int i = 0; i < suitCounts.length; ++i) {
+			if (suitCounts[i] > 0) {
+				uniqueSuits += SUIT_CHARS[i];
 			}
 		}
-
-		//
-		// Check for straight.
-		// Any pair eliminates the possibility of a straight.
-		//
-		if (tupleCounts[0] == 0)
-		{
-			this.straightFlag = 
-				(rankCount == 0) ||						// all wild
-				(highRank - lowRank < CardsInHand) ||	// normal straight
-				(highRank == Ace &&				// ace-low straight
-					 (rankCount == 1 || ranks[rankCount - 2] <= Five));
-		}
-	}
-	
-	public boolean isWild (byte card)
-	{
-		return card == Joker || (deucesWild && Card.rankOf (card) == Deuce);
 	}
 
-	//
-	// The queries.
-	//
-
-	public int getValue (int index)
+	public String getHand ()
 	{
-		return hand[index];
-	}
-
-	public int getRank (int index)
-	{
-		return Card.rankOf (hand[index]);
-	}
-
-	public int getSuit (int index)
-	{
-		return Card.suitOf (hand[index]);
+		return hand;
 	}
 
 	public int getWildCount ()
@@ -150,49 +59,30 @@ public class HandInfo implements Constants
 		return wildCount;
 	}
 
-	public int getLowRank ()
+	public int getRankCount(int r)
 	{
-		return lowRank;
+		return rankCounts.charAt(r) - '0';
 	}
 
-	public int getHighRank ()
+	public int getRankCount(int lo, int hi)
 	{
-		return highRank;
+		int sum = 0;
+		for (int i = lo; i < hi; ++i) {
+			sum += getRankCount(i);
+		}
+		return sum;
 	}
 
-	public int getHighPairRank ()
+	public String getSuits ()
 	{
-		return highPairRank;
-	}
-
-	public int getPairCount ()
-	{
-		return tupleCounts[0];
-	}
-
-	public int getTripleCount ()
-	{
-		return tupleCounts[1];
-	}
-
-	public int getQuadCount ()
-	{
-		return tupleCounts[2];
-	}
-
-	public boolean isFlush ()
-	{
-		return isFlush (NilSuit);
-	}
-
-	public boolean isFlush (byte ofThisSuit)
-	{
-		return ofThisSuit == NilSuit ? (flushSuit != NilSuit)
-									 : (flushSuit == ofThisSuit);
+		return uniqueSuits;
 	}
 
 	public boolean isStraight ()
 	{
-		return straightFlag;
+		return
+			rankCounts.matches("0*[01][01][01][01][01]0*") ||
+			// Ace-low straight:
+			rankCounts.matches("[01][01][01][01]000000000[01]");
 	}
 }
