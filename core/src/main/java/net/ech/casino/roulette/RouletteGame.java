@@ -242,7 +242,7 @@ public class RouletteGame extends TableGame implements Constants
 			for (int i = 0; i < bets.length; ++i)
 				machine.computeWin (number, bets[i]);
 
-			Transaction trans = new Transaction (this);
+			Transaction trans = new Transaction ();
 			double totalReturn = getTotalReturn ();
 			trans.setWagerAmount (totalBet);
 			trans.setReturnAmount (Math.min (totalBet, totalReturn));

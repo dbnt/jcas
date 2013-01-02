@@ -229,7 +229,7 @@ public abstract class Game
 		// Fill in the blanks:
 		//
 		protected void validate ()
-			throws GameException {}
+			throws CasinoException {}
 		protected void computePlay () {}
 		protected void transact ()
 			throws CasinoException {}

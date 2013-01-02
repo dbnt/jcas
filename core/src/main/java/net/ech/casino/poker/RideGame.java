@@ -338,10 +338,10 @@ public class RideGame extends TableGame implements CardConstants
 		// Validate whether move is legal, validate bet amounts.
 		//
 		protected void validate ()
-		   throws GameException
+		   throws CasinoException
 		{
 			if (state != DEAL_OK)
-				throw new IllegalPlayException (RideGame.this);
+				throw new IllegalPlayException ();
 
 			testBet (newAnte);
 		}
@@ -371,7 +371,7 @@ public class RideGame extends TableGame implements CardConstants
 		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction (RideGame.this);
+			Transaction trans = new Transaction ();
 			trans.setWagerAmount (newAnte * 3);
 			getCasino().executeTransaction (trans);
 		}
@@ -395,10 +395,10 @@ public class RideGame extends TableGame implements CardConstants
 		// Validate whether move is legal.
 		//
 		protected void validate ()
-		   throws GameException
+		   throws CasinoException
 		{
 			if (state == DEAL_OK)
-				throw new IllegalPlayException (RideGame.this);
+				throw new IllegalPlayException ();
 		}
 
 		//
@@ -435,7 +435,7 @@ public class RideGame extends TableGame implements CardConstants
 		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction (RideGame.this);
+			Transaction trans = new Transaction ();
 			int returnAmount = isWithdraw ? ante : 0;
 			if (isDealOk ())
 			{

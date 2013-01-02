@@ -23,26 +23,23 @@ package net.ech.casino;
  */
 public class Transaction
 {
-	private Game game;
 	private Money wagerAmount;
 	private Money returnAmount;
 	private Money winAmount;
 	private JackpotTransaction jackTrans;
+	private Object gameState;
 
 	/**
-	 * Default constructor.
+	 * The associated game state.
 	 */
-	public Transaction (Game game)
+	public void setGameState(Object gameState)
 	{
-		this.game = game;
+		this.gameState = gameState;
 	}
 
-	/**
-	 * Get the associated Game.
-	 */
-	public Game getGame()
+	public Object getGameState()
 	{
-		return game;
+		return gameState;
 	}
 
 	/**

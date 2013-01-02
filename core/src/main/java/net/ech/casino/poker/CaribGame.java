@@ -424,10 +424,10 @@ public class CaribGame extends TableGame implements CaribConstants
 		// Validate whether move is legal, validate bet amounts.
 		//
 		protected void validate ()
-		   throws GameException
+		   throws CasinoException
 		{
 			if (!dealOk) 
-				throw new IllegalPlayException(CaribGame.this);
+				throw new IllegalPlayException();
 
 			testBet (newAnte);
 
@@ -492,7 +492,7 @@ public class CaribGame extends TableGame implements CaribConstants
 		{
 			// Two transactions -- one for the drop, one for the ante --
 			// packaged as one.
-			Transaction trans = new Transaction (CaribGame.this);
+			Transaction trans = new Transaction ();
 			trans.setWagerAmount (ante + drop);
 			trans.setWinAmount (dropPayout);
 
@@ -527,10 +527,10 @@ public class CaribGame extends TableGame implements CaribConstants
 		// Validate whether move is legal.
 		//
 		protected void validate ()
-		   throws GameException
+		   throws CasinoException
 		{
 			if (dealOk) 
-				throw new IllegalPlayException(CaribGame.this);
+				throw new IllegalPlayException();
 		}
 
 		//
@@ -581,7 +581,7 @@ public class CaribGame extends TableGame implements CaribConstants
 		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction (CaribGame.this);
+			Transaction trans = new Transaction ();
 			trans.setWagerAmount (ante * 2);
 			double totalBet = ante * 3;
 			double totalReturn = getWin ();
@@ -600,10 +600,10 @@ public class CaribGame extends TableGame implements CaribConstants
 		// Validate whether move is legal.
 		//
 		protected void validate ()
-		   throws GameException
+		   throws CasinoException
 		{
 			if (dealOk) 
-				throw new IllegalPlayException(CaribGame.this);
+				throw new IllegalPlayException();
 		}
 
 		//
@@ -622,7 +622,7 @@ public class CaribGame extends TableGame implements CaribConstants
 		protected void transact ()
 			throws CasinoException
 		{
-			getCasino().executeTransaction (new Transaction (CaribGame.this));
+			getCasino().executeTransaction (new Transaction ());
 		}
 	}
 	

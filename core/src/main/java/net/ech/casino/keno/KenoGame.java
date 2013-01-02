@@ -251,7 +251,7 @@ public class KenoGame extends CreditsGame
 	private void executeTransaction ()
 		throws CasinoException
 	{
-		Transaction trans = new Transaction (this);
+		Transaction trans = new Transaction ();
 		trans.setWagerAmount (getBetMoney ());
 		if (getWin () > 0)
 		{

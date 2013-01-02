@@ -29,7 +29,7 @@ public class HandInfo
 		for (int i = 0; i < CARDS_IN_HAND; ++i) {
 			char rank = hand.charAt(i * 2);
 			char suit = hand.charAt(i * 2 + 1);
-			if (rank == JOKER_RANK || wildCardPattern.matches(rank, suit)) {
+			if (rank == JOKER_STRING.charAt(0) || wildCardPattern.matches(rank, suit)) {
 				++wildCount;
 			}
 			else {

@@ -12,10 +12,9 @@ import java.util.*;
  * @version 1.2
  * @author James Echmalian, ech@ech.net
  */
-public class CasinoException extends Exception
+public class CasinoException
+	extends Exception
 {
-	private Exception sub;
-
 	/**
 	 * Constructor.
 	 */
@@ -36,58 +35,17 @@ public class CasinoException extends Exception
 	 * Constructor.
 	 * @param ex		The original exception wrapped by this one.
 	 */
-	public CasinoException (Exception ex)
+	public CasinoException (Throwable cause)
 	{
-		super (ex.getMessage ());
-		this.sub = ex;
+		super (cause);
 	}
 
 	/**
 	 * Constructor.
 	 * @param ex		The original exception wrapped by this one.
 	 */
-	public CasinoException (String msg, Exception ex)
+	public CasinoException (String msg, Throwable cause)
 	{
-		super (msg + ": " + ex.getMessage ());
-		this.sub = ex;
-	}
-
-	/**
-	 * Print this exception and its stack trace to the 
-	 * standard error stream. 
-	 */
-	public void printStackTrace ()
-	{ 
-		printStackTrace (System.err);
-	}
-
-	/**
-	 * Print this exception and its stack trace to the 
-	 * specified print stream. 
-	 */
-	public void printStackTrace (java.io.PrintStream s)
-	{ 
-		if (sub != null)
-		{
-			s.println (this);
-			sub.printStackTrace (s);
-		}
-		else
-			super.printStackTrace (s);
-	}
-
-	/**
-	 * Print this exception and its stack trace to the specified
-	 * print writer.
-	 */
-	public void printStackTrace (java.io.PrintWriter s)
-	{ 
-		if (sub != null)
-		{
-			s.println (this);
-			sub.printStackTrace (s);
-		}
-		else
-			super.printStackTrace (s);
+		super (msg, cause);
 	}
 }

@@ -1,16 +1,18 @@
 package net.ech.casino.videopoker;
 
+import net.ech.casino.Money;
+
 /**
  * Game state bean.
  */
 public class VideoPokerState
-	implement Cloneable
+	implements Cloneable
 {
 	public enum Action
 	{
-		DEAL = 0,
-		DRAW = 1,
-		ACCEPT_BONUS = 2
+		DEAL,
+		DRAW,
+		ACCEPT_BONUS
 	}
 
 	private VideoPokerMachine machine;
@@ -38,16 +40,42 @@ public class VideoPokerState
 	}
 
 	/**
-	 * The pending action.
+	 * The value of a credit.
 	 */
-	public Action getPendingAction ()
+	public Money getCreditValue()
 	{
-		return pendingAction;
+		return creditValue;
 	}
 
-	public void setPendingAction(Action pendingAction)
+	public void setCreditValue(Money creditValue)
 	{
-		this.pendingAction = pendingAction;
+		this.creditValue = creditValue;
+	}
+
+	/**
+	 * The current wager.
+	 */
+	public int getWagerCredits()
+	{
+		return wagerCredits;
+	}
+
+	public void setWagerCredits(int creditValue)
+	{
+		this.wagerCredits = wagerCredits;
+	}
+
+	/**
+	 * The current "win".
+	 */
+	public int getWinCredits()
+	{
+		return wagerCredits;
+	}
+
+	public void setWinCredits(int winCredits)
+	{
+		this.winCredits = winCredits;
 	}
 
 	/**
@@ -72,7 +100,7 @@ public class VideoPokerState
 		return hand;
 	}
 
-	public void setHand()
+	public void setHand(String hand)
 	{
 		this.hand = hand;
 	}
@@ -117,5 +145,28 @@ public class VideoPokerState
 	public void setCharged(boolean charged)
 	{
 		this.charged = charged;
+	}
+
+	/**
+	 * The pending action.
+	 */
+	public Action getPendingAction ()
+	{
+		return pendingAction;
+	}
+
+	public void setPendingAction(Action pendingAction)
+	{
+		this.pendingAction = pendingAction;
+	}
+
+	public VideoPokerState copy()
+	{
+		try {
+			return (VideoPokerState) clone();
+		}
+		catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

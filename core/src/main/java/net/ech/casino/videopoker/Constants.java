@@ -14,8 +14,8 @@ public interface Constants
 	public final static int CARDS_IN_HAND = 5;
 
 	public final static String RANKS_STRING = "23456789TJQKA";
-	public final static String RANK_CHARS = RANKS_STRING.getChars();
+	public final static char[] RANK_CHARS = RANKS_STRING.toCharArray();
 	public final static String SUITS_STRING = "DCHS";
-	public final static String SUIT_CHARS = SUITS_STRING.getChars();
+	public final static char[] SUIT_CHARS = SUITS_STRING.toCharArray();
 	public final static String JOKER_STRING = "jo";
 }

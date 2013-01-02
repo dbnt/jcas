@@ -353,10 +353,10 @@ public class PaiGowGame extends TableGame implements Constants
 		}
 
 		protected void validate ()
-		   throws GameException
+		   throws CasinoException
 		{
 			if (!dealOk) 
-				throw new IllegalPlayException(PaiGowGame.this);
+				throw new IllegalPlayException();
 		}
 
 		protected void computePlay ()
@@ -373,7 +373,7 @@ public class PaiGowGame extends TableGame implements Constants
 		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction (PaiGowGame.this);
+			Transaction trans = new Transaction ();
 			trans.setWagerAmount (bet);
 			getCasino().executeTransaction (trans);
 		}
@@ -382,10 +382,10 @@ public class PaiGowGame extends TableGame implements Constants
 	private class HouseWayPlay extends PaiGowPlay
 	{
 		protected void validate ()
-		   throws GameException
+		   throws CasinoException
 		{
 			if (dealOk) 
-				throw new IllegalPlayException (PaiGowGame.this);
+				throw new IllegalPlayException ();
 		}
 
 		protected void computePlay ()
@@ -396,7 +396,7 @@ public class PaiGowGame extends TableGame implements Constants
 		protected void transact ()
 			throws CasinoException
 		{
-			getCasino().executeTransaction (new Transaction (PaiGowGame.this));
+			getCasino().executeTransaction (new Transaction ());
 		}
 	}
 
@@ -410,10 +410,10 @@ public class PaiGowGame extends TableGame implements Constants
 		}
 
 		protected void validate ()
-		   throws GameException
+		   throws CasinoException
 		{
 			if (dealOk) 
-				throw new IllegalPlayException (PaiGowGame.this);
+				throw new IllegalPlayException ();
 
 			// Check given hand against the hand dealt originally 
 			// to ensure that the client is resending the same set
@@ -479,7 +479,7 @@ public class PaiGowGame extends TableGame implements Constants
 		protected void transact ()
 			throws CasinoException
 		{
-			Transaction trans = new Transaction (PaiGowGame.this);
+			Transaction trans = new Transaction ();
 			double totalReturn = getWin ();
 			if (totalReturn > 0)
 			{

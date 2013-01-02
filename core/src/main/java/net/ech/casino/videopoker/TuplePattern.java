@@ -4,14 +4,14 @@ package net.ech.casino.videopoker;
  * Logic for detecting a winning pair, triple, quad, or five of a kind.
  */
 public class TuplePattern
-	implements Constants, HandPattern
+	implements HandPattern
 {
 	private int cardinality;
 	private String ranks;
 
 	public TuplePattern (int cardinality)
 	{
-		this(cardinality, RANK_STRING);
+		this(cardinality, RANKS_STRING);
 	}
 
 	/**
@@ -28,7 +28,7 @@ public class TuplePattern
 	{
 		for (int r = NUMBER_OF_RANKS; --r >= 0; ) {
 			if (ranks.indexOf(RANK_CHARS[r]) >= 0 &&
-				handInfo.getCardinality(r) >= cardinality) {
+				handInfo.getRankCount(r) + handInfo.getWildCount() >= cardinality) {
 				return true;
 			}
 		}

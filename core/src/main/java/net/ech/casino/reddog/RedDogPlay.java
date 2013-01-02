@@ -100,14 +100,14 @@ public abstract class RedDogPlay implements Constants
 
 		if (!isEnabled())
 		{
-			throw new IllegalPlayException (game);
+			throw new IllegalPlayException ();
 		}
 
 		// Get a working copy of the table.
 		RedDogModel workingModel = game.copyModel();
 
 		// Open a new transaction.
-		Transaction workingTrans = new Transaction (game);
+		Transaction workingTrans = new Transaction ();
 		
 		// Execute player changes to the model; build up the transaction.
 		this.execute (workingModel, workingTrans);

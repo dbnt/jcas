@@ -264,7 +264,7 @@ public class BaccaratGame extends TableGame implements Constants
 		try
 		{
 			computeHand (playerBet, bankBet, tieBet, reshuffleRequested);
-			Transaction trans = new Transaction (this);
+			Transaction trans = new Transaction ();
 			double totalReturn = getTotalReturn ();
 			trans.setWagerAmount (totalBet);
 			trans.setReturnAmount (Math.min (totalBet, totalReturn));

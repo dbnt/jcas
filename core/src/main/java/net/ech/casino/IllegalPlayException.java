@@ -4,33 +4,28 @@
 
 package net.ech.casino;
 
-import java.util.*;
-
 /**
- * An IllegalPlayException represents a user command that has come
- * out of sequence.	 Usually indicates error in the client.
- * 
- * @version 1.2
- * @author James Echmalian, ech@ech.net
+ * An IllegalPlayException represents a user play that is invalid
+ * for some reason - for example, it is out of sequence, or some 
+ * parameter value is malformed.  Usually indicates an error in the
+ * client.
  */
-public class IllegalPlayException extends GameException
+public class IllegalPlayException
+	extends CasinoException
 {
 	/**
 	 * Constructor.
-	 * @param game			the related game
 	 */
-	public IllegalPlayException (Game game)
+	public IllegalPlayException ()
 	{
-		super (game);
 	}
 
 	/**
 	 * Constructor.
 	 * @param msg		an error message.
-	 * @param game		the related game
 	 */
-	public IllegalPlayException (String msg, Game game)
+	public IllegalPlayException (String msg)
 	{
-		super (msg, game);
+		super (msg);
 	}
 }

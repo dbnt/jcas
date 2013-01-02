@@ -435,7 +435,7 @@ public class BlackjackGame extends TableGame implements Constants
 		throws CasinoException
 	{
 		if (!isDealOk ())
-			throw new IllegalPlayException (this);
+			throw new IllegalPlayException ();
 
 		doClear();
 	}
@@ -689,10 +689,10 @@ public class BlackjackGame extends TableGame implements Constants
 		}
 
 		protected void validate ()
-			throws GameException
+			throws CasinoException
 		{
 			if ((moveFlags & (1<<move)) == 0)
-				throw new IllegalPlayException (BlackjackGame.this);
+				throw new IllegalPlayException ();
 		}
 
 		protected void transact ()
@@ -701,7 +701,7 @@ public class BlackjackGame extends TableGame implements Constants
 			boolean closeRound = isDealOk ();
 
 			// Execute transaction.
-			Transaction trans = new Transaction (BlackjackGame.this);
+			Transaction trans = new Transaction ();
 			if (betIncrease > 0)
 				trans.setWagerAmount (betIncrease);
 			if (closeRound)

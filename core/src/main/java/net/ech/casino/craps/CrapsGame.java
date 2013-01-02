@@ -255,7 +255,7 @@ public class CrapsGame extends TableGame implements Constants
 			// All bets are subtracted with each roll.	All unresolved bets are
 			// restored to the player's account with each roll.
 			//
-			Transaction trans = new Transaction (this);
+			Transaction trans = new Transaction ();
 			trans.setWagerAmount (getTotalBet ());
 			trans.setWinAmount (getTotalReturn ());
 			getCasino().executeTransaction (trans);

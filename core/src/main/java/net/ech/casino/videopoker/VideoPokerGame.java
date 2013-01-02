@@ -5,7 +5,11 @@
 package net.ech.casino.videopoker;
 
 import java.util.*;
-import net.ech.casino.*;
+import net.ech.casino.CasinoException;
+import net.ech.casino.IllegalPlayException;
+import net.ech.casino.Money;
+import net.ech.casino.Randomizer;
+import net.ech.casino.Transaction;
 
 /**
  * Video poker game servlet.
@@ -27,7 +31,7 @@ public class VideoPokerGame
 		this.state = state;
 	}
 
-	public void getVideoPokerState()
+	public VideoPokerState getVideoPokerState()
 	{
 		return state;
 	}
@@ -40,7 +44,7 @@ public class VideoPokerGame
 	{
 		new VideoPokerMove() {
 			@Override
-			protected void execute()
+			public void execute()
 				throws CasinoException
 			{
 				validatePendingAction(VideoPokerState.Action.DEAL);
@@ -57,7 +61,7 @@ public class VideoPokerGame
 	{
 		new VideoPokerMove() {
 			@Override
-			protected void execute()
+			public void execute()
 				throws CasinoException
 			{
 				validatePendingAction(VideoPokerState.Action.DEAL);
@@ -71,15 +75,16 @@ public class VideoPokerGame
 	 * User move: set the wager amount and deal.
 	 */
 	public void wagerAndDeal(final int wagerCredits)
+		throws CasinoException
 	{
 		new VideoPokerMove() {
 			@Override
-			protected void execute()
+			public void execute()
 				throws CasinoException
 			{
 				validatePendingAction(VideoPokerState.Action.DEAL);
 				validateWagerCredits(wagerCredits);
-				String cards = dealNewCards();
+				String cards = dealCards();
 				String hand = cards.substring(0, CARDS_IN_HAND * 2);
 				state.setWagerCredits(wagerCredits);
 				state.setWinCredits(0);
@@ -88,7 +93,7 @@ public class VideoPokerGame
 				state.setHolds(null);
 				state.setGrade(grade(hand));
 				state.setPendingAction(VideoPokerState.Action.DRAW);
-				trans.setWagerAmount(state.getCreditValue().multiply(wagerCredits));
+				transaction.setWagerAmount(state.getCreditValue().multiply(wagerCredits));
 			}
 		}.execute();
 	}
@@ -101,12 +106,12 @@ public class VideoPokerGame
 	{
 		new VideoPokerMove() {
 			@Override
-			protected void execute()
+			public void execute()
 				throws CasinoException
 			{
 				validatePendingAction(VideoPokerState.Action.DRAW);
 				String newHolds = validateHolds(holds);
-				String newHand = draw(newHolds);
+				String newHand = drawCards(newHolds);
 				int grade = grade(newHand);
 				Reward reward = getReward(grade);
 				state.setHand(newHand);
@@ -119,8 +124,8 @@ public class VideoPokerGame
 				int winCredits = state.getWinCredits();
 				int returnCredits = Math.max(winCredits - state.getWagerCredits(), 0);
 				winCredits -= returnCredits;
-				trans.setReturnAmount(state.getCreditValue().multiply(returnCredits));
-				trans.setWinAmount(state.getCreditValue().multiply(winCredits));
+				transaction.setReturnAmount(state.getCreditValue().multiply(returnCredits));
+				transaction.setWinAmount(state.getCreditValue().multiply(winCredits));
 			}
 		}.execute();
 	}
@@ -133,24 +138,25 @@ public class VideoPokerGame
 		public VideoPokerMove()
 		{
 			this.state = copyOrCreateInitialState();
-			this.transaction == newTransaction();
+			this.transaction = new Transaction();
 		}
 
 		abstract public void execute()
 			throws CasinoException;
 
 		protected void validatePendingAction(VideoPokerState.Action expected)
+			throws IllegalPlayException
 		{
 			if (state.getPendingAction() != expected) {
-				throw new IllegalMoveException("bad state");
+				throw new IllegalPlayException("bad state");
 			}
 		}
 
 		protected void commit()
 			throws CasinoException
 		{
-			trans.setUpdatedState(state);
-			executeTransaction(transaction);
+			transaction.setGameState(state);
+			gameContext.get(Accounting.class).executeTransaction(transaction);
 			setVideoPokerState(state);
 		}
 	}
@@ -159,12 +165,13 @@ public class VideoPokerGame
 	{
 		VideoPokerState state = getVideoPokerState();
 		if (state == null) {
-			setVideoPokerState(state = new VideoPokerState());
-			state.setMachine(config.getDefaultMachine());
-			state.setCreditValue(config.getDefaultCreditValue());
+			state = new VideoPokerState();
+			state.setMachine(getConfiguration().getDefaultMachine());
+			state.setCreditValue(getConfiguration().getDefaultCreditValue());
+			setVideoPokerState(state);
 		}
 		else {
-			state = (VideoPokerState) state.clone();
+			state = state.copy();
 		}
 		return state;
 	}
@@ -191,7 +198,7 @@ public class VideoPokerGame
 		if (holds == null) {
 			holds = "";
 		}
-		while (holds.length() < CARDS_PER_HAND) {
+		while (holds.length() < CARDS_IN_HAND) {
 			holds = holds + " ";
 		}
 
@@ -213,17 +220,17 @@ public class VideoPokerGame
 		int nJokers = state.getMachine().getNumberOfJokers();
 		Deck deck = new Deck(nJokers);
 		Randomizer randomizer = gameContext.get(Randomizer.class);
-		return deck.shuffleAndDeal(CARDS_PER_HAND * 2);
+		return deck.shuffleAndDeal(randomizer, CARDS_IN_HAND * 2);
 	}
 
 	private String drawCards(String holds)
 	{
 		String hand = state.getHand();
 		String cards = state.getCards();
-		int cardsIndex = CARDS_PER_HAND;
+		int cardsIndex = CARDS_IN_HAND;
 
 		StringBuilder buf = new StringBuilder();
-		for (int i = 0; i < CardsInHand; ++i) {
+		for (int i = 0; i < CARDS_IN_HAND; ++i) {
 			String card;
 			switch (holds.charAt(i)) {
 			case 'H':
@@ -238,14 +245,27 @@ public class VideoPokerGame
 		return buf.toString();
 	}
 
-	/**
-	 * Grade the current hand.
-	 * @return the index of the corresponding payout row, or -1 if no win.
-	 */
-	public int grade (String hand)
+	private int grade (String hand)
 	{
-		HandInfo handInfo = new HandInfo (hand, state.getMachine().getWildCardPattern());
-		for () {
+		final HandInfo handInfo = new HandInfo (hand, state.getMachine().getWildCardPattern());
+		final PayTableEntry[] payTable = state.getMachine().getPayTable();
+		final List<Integer> matchIndexes = new ArrayList<Integer>();
+		for (int i = 0; i < payTable.length; ++i) {
+			if (payTable[i].getHandPattern().matches(handInfo)) {
+				matchIndexes.add(i);
+			}
 		}
+		Collections.sort(matchIndexes, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				return payTable[i2.intValue()].getReward().compareTo(payTable[i1.intValue()].getReward());
+			}
+		});
+		return matchIndexes.size() > 0 ? matchIndexes.get(0).intValue() : -1;
+	}
+
+	private Reward getReward(int grade)
+	{
+		return grade >= 0 ? state.getMachine().getPayTable()[grade].getReward() : null;
 	}
 }

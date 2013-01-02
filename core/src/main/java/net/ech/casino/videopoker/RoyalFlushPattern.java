@@ -32,7 +32,7 @@ public class RoyalFlushPattern
 	@Override
 	public boolean matches (HandInfo handInfo)
 	{
-		return (wildPermitted || handInfo.getWildCount == 0) &&
+		return (wildPermitted || handInfo.getWildCount() == 0) &&
 			super.matches(handInfo) &&
 			handInfo.getRankCount(0, 8) == 0;
 	}

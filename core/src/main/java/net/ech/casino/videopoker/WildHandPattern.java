@@ -8,7 +8,7 @@ public class WildHandPattern
 {
 	private int cardinality;
 
-	public WildHand (int cardinality)
+	public WildHandPattern (int cardinality)
 	{
 		this.cardinality = cardinality;
 	}
