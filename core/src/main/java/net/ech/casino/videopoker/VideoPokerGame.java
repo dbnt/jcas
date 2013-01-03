@@ -187,9 +187,14 @@ public class VideoPokerGame
 	private void validateWagerCredits(int wagerCredits)
 		throws CasinoException
 	{
-		if (wagerCredits <= 0 || wagerCredits > getConfiguration().getMaximumWager()) {
+		if (wagerCredits <= 0 || wagerCredits > getMaximumWager()) {
 			throw new IllegalPlayException("invalid wager: " + wagerCredits);
 		}
+	}
+
+	private int getMaximumWager()
+	{
+		return getConfiguration().getMaximumWager();
 	}
 
 	private String validateHolds(String holds)
@@ -258,7 +263,7 @@ public class VideoPokerGame
 		Collections.sort(matchIndexes, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer i1, Integer i2) {
-				return payTable[i2.intValue()].getReward().compareTo(payTable[i1.intValue()].getReward());
+				return getReward(i2.intValue()).compareTo(getReward(i1.intValue()));
 			}
 		});
 		return matchIndexes.size() > 0 ? matchIndexes.get(0).intValue() : -1;
@@ -266,6 +271,9 @@ public class VideoPokerGame
 
 	private Reward getReward(int grade)
 	{
-		return grade >= 0 ? state.getMachine().getPayTable()[grade].getReward() : null;
+		if (grade < 0)
+			return null;
+		boolean maxWager = state.getWagerCredits() == getMaximumWager();
+		return state.getMachine().getPayTable()[grade].getReward(maxWager);
 	}
 }

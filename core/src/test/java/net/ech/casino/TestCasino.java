@@ -133,14 +133,14 @@ public class TestCasino extends CasinoAdapter
 				jackpotAmount = jackpots.claimJackpot (jackpotName, jtrans.getClaimFactor());
 				tallyWin (jackpotAmount);
 			}
-			applyJackpotAmount (trans.getGame(), jackpotName, jackpotAmount);
+			//applyJackpotAmount (trans.getGame(), jackpotName, jackpotAmount);
 		}
 
 		TestCasino.this.lastTransaction = trans;
 
-		if (trans.getGame ().isQuitLegal (0)) {
+		//if (trans.getGame ().isQuitLegal (0)) {
 			tallyRound ();
-		}
+		//}
 	}
 
     /**

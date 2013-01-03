@@ -9,16 +9,36 @@ package net.ech.casino.videopoker;
  */
 public class PayTableEntry
 {
+	private String label;
 	private HandPattern pattern;
 	private Reward reward;
+	private Reward maxWagerReward;
 
 	/**
 	 * Constructor.
 	 */
-	public PayTableEntry (HandPattern pattern, Reward reward)
+	public PayTableEntry (String label, HandPattern pattern, Reward reward)
 	{
+		this(label, pattern, reward, reward);
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public PayTableEntry (String label, HandPattern pattern, Reward reward, Reward maxWagerReward)
+	{
+		this.label = label;
 		this.pattern = pattern;
 		this.reward = reward;
+		this.maxWagerReward = maxWagerReward;
+	}
+
+	/**
+	 * A label, for logging.
+	 */
+	public String getLabel()
+	{
+		return label;
 	}
 
 	/**
@@ -32,8 +52,8 @@ public class PayTableEntry
 	/**
 	 * Get the reward.
 	 */
-	public Reward getReward()
+	public Reward getReward(boolean maxWager)
 	{
-		return reward;
+		return maxWager ? maxWagerReward : reward;
 	}
 }
