@@ -9,25 +9,15 @@ public class FullHousePattern
 	@Override
 	public boolean matches (HandInfo handInfo)
 	{
-		int availableWilds = handInfo.getWildCount();
-		boolean gotTriple = false;
-		boolean gotPair = false;
-
+		int nranks = 0;
+		int maxCount = 0;
 		for (int r = NUMBER_OF_RANKS; --r >= 0; ) {
 			int rc = handInfo.getRankCount(r);
-			switch (rc + availableWilds) {
-			case 5:
-			case 4:
-			case 3:
-				gotTriple = true;
-				availableWilds -= Math.max(3 - rc, 0);
-				break;
-			case 2:
-				gotPair = true;
-				availableWilds -= 2 - rc;
+			if (rc > 0) {
+				++nranks;
+				maxCount = Math.max(maxCount, rc);
 			}
 		}
-
-		return gotTriple && gotPair;
+		return nranks <= 2 && maxCount < 4;
 	}
 }

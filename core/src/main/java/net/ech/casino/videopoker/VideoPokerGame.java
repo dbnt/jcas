@@ -91,7 +91,9 @@ public class VideoPokerGame
 				state.setCards(cards);
 				state.setHand(hand);
 				state.setHolds(null);
-				state.setGrade(grade(hand));
+				Grader.Grade grade = getGrader().grade(hand, isMaximumWager());
+				state.setGradeIndex(grade.index);
+				state.setGradeLabel(grade.label);
 				state.setPendingAction(VideoPokerState.Action.DRAW);
 				transaction.setWagerAmount(state.getCreditValue().multiply(wagerCredits));
 			}
@@ -112,14 +114,14 @@ public class VideoPokerGame
 				validatePendingAction(VideoPokerState.Action.DRAW);
 				String newHolds = validateHolds(holds);
 				String newHand = drawCards(newHolds);
-				int grade = grade(newHand);
-				Reward reward = getReward(grade);
+				Grader.Grade grade = getGrader().grade(newHand, isMaximumWager());
 				state.setHand(newHand);
 				state.setHolds(newHolds);
-				state.setGrade(grade);
+				state.setGradeIndex(grade.index);
+				state.setGradeLabel(grade.label);
 				state.setPendingAction(VideoPokerState.Action.DEAL);
-				if (reward != null) {
-					reward.grant(state);
+				if (grade.reward != null) {
+					grade.reward.grant(state);
 				}
 				int winCredits = state.getWinCredits();
 				int returnCredits = Math.max(winCredits - state.getWagerCredits(), 0);
@@ -136,6 +138,7 @@ public class VideoPokerGame
 		Transaction transaction;
 
 		public VideoPokerMove()
+			throws CasinoException
 		{
 			this.state = copyOrCreateInitialState();
 			this.transaction = new Transaction();
@@ -162,6 +165,7 @@ public class VideoPokerGame
 	}
 
 	private VideoPokerState copyOrCreateInitialState()
+		throws CasinoException
 	{
 		VideoPokerState state = getVideoPokerState();
 		if (state == null) {
@@ -192,7 +196,14 @@ public class VideoPokerGame
 		}
 	}
 
+	private boolean isMaximumWager()
+		throws CasinoException
+	{
+		return state.getWagerCredits() == getMaximumWager();
+	}
+
 	private int getMaximumWager()
+		throws CasinoException
 	{
 		return getConfiguration().getMaximumWager();
 	}
@@ -215,12 +226,13 @@ public class VideoPokerGame
 	}
 
 	private VideoPokerConfig getConfiguration()
+		throws CasinoException
 	{
-		VideoPokerConfig config =  gameContext.get(VideoPokerConfig.class);
-		return config == null ? new VideoPokerConfig() : config;
+		return gameContext.get(VideoPokerConfig.class);
 	}
 
 	private String dealCards()
+		throws CasinoException
 	{
 		int nJokers = state.getMachine().getNumberOfJokers();
 		Deck deck = new Deck(nJokers);
@@ -250,30 +262,8 @@ public class VideoPokerGame
 		return buf.toString();
 	}
 
-	private int grade (String hand)
+	private Grader getGrader()
 	{
-		final HandInfo handInfo = new HandInfo (hand, state.getMachine().getWildCardPattern());
-		final PayTableEntry[] payTable = state.getMachine().getPayTable();
-		final List<Integer> matchIndexes = new ArrayList<Integer>();
-		for (int i = 0; i < payTable.length; ++i) {
-			if (payTable[i].getHandPattern().matches(handInfo)) {
-				matchIndexes.add(i);
-			}
-		}
-		Collections.sort(matchIndexes, new Comparator<Integer>() {
-			@Override
-			public int compare(Integer i1, Integer i2) {
-				return getReward(i2.intValue()).compareTo(getReward(i1.intValue()));
-			}
-		});
-		return matchIndexes.size() > 0 ? matchIndexes.get(0).intValue() : -1;
-	}
-
-	private Reward getReward(int grade)
-	{
-		if (grade < 0)
-			return null;
-		boolean maxWager = state.getWagerCredits() == getMaximumWager();
-		return state.getMachine().getPayTable()[grade].getReward(maxWager);
+		return new Grader(state.getMachine());
 	}
 }

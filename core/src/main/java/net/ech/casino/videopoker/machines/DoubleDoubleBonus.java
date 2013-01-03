@@ -17,6 +17,7 @@ public class DoubleDoubleBonus
 			new PayTableEntry(
 				"ROYAL FLUSH",
 				new RoyalFlushPattern(),
+				new Reward(250),
 				new Reward(800)
 			),
 			new PayTableEntry(

@@ -4,35 +4,19 @@
 
 package net.ech.casino.videopoker;
 
-import java.util.HashSet;
 import java.util.Set;
 import net.ech.casino.Money;
 
 /**
  * 
  */
-public class VideoPokerConfig
-	implements Constants
+public interface VideoPokerConfig
 {
-	private int maximumWager;
+	public VideoPokerMachine getDefaultMachine();
 
-	public VideoPokerMachine getDefaultMachine()
-	{
-		return null;
-	}
+	public Money getDefaultCreditValue();
 
-	public Money getDefaultCreditValue()
-	{
-		return new Money(1);
-	}
+	public int getMaximumWager();
 
-	public int getMaximumWager()
-	{
-		return maximumWager;
-	}
-
-	public Set<Money> getValidCreditValues()
-	{
-		return new HashSet<Money>();
-	}
+	public Set<Money> getValidCreditValues();
 }

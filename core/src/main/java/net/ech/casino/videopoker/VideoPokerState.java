@@ -11,8 +11,7 @@ public class VideoPokerState
 	public enum Action
 	{
 		DEAL,
-		DRAW,
-		ACCEPT_BONUS
+		DRAW
 	}
 
 	private VideoPokerMachine machine;
@@ -22,9 +21,10 @@ public class VideoPokerState
 	private String cards;
 	private String hand;
 	private String holds;
-	private int grade = -1;
+	private Integer gradeIndex;
+	private String gradeLabel;
 	private boolean charged;
-	private Action pendingAction;
+	private Action pendingAction = Action.DEAL;
 
 	/**
 	 * Rules governing hand evaluation and payout.
@@ -60,7 +60,7 @@ public class VideoPokerState
 		return wagerCredits;
 	}
 
-	public void setWagerCredits(int creditValue)
+	public void setWagerCredits(int wagerCredits)
 	{
 		this.wagerCredits = wagerCredits;
 	}
@@ -70,7 +70,7 @@ public class VideoPokerState
 	 */
 	public int getWinCredits()
 	{
-		return wagerCredits;
+		return winCredits;
 	}
 
 	public void setWinCredits(int winCredits)
@@ -119,19 +119,29 @@ public class VideoPokerState
 		this.holds = holds;
 	}
 
-	/**
-	 * The grade of the current hand.	The grade is defined as the 
-	 * index into the pay table rows, with zero as the top row.	  The 
-	 * grade of a losing hand is -1. 
-	 */
-	public int getGrade ()
+	public String getGradeLabel ()
 	{
-		return grade;
+		return gradeLabel;
 	}
 
-	public void setGrade(int grade)
+	public void setGradeLabel(String gradeLabel)
 	{
-		this.grade = grade;
+		this.gradeLabel = gradeLabel;
+	}
+
+	/**
+	 * The gradeIndex of the current hand.	The gradeIndex is defined as the 
+	 * the index into the pay table rows, with zero as the top row.	  The 
+	 * grade of a losing hand is null.
+	 */
+	public Integer getGradeIndex ()
+	{
+		return gradeIndex;
+	}
+
+	public void setGradeIndex(Integer gradeIndex)
+	{
+		this.gradeIndex = gradeIndex;
 	}
 
 	/**

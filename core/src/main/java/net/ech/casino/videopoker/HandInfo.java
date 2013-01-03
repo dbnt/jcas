@@ -83,6 +83,6 @@ public class HandInfo
 		return
 			rankCounts.matches("0*[01][01][01][01][01]0*") ||
 			// Ace-low straight:
-			rankCounts.matches("[01][01][01][01]000000000[01]");
+			rankCounts.matches("([01]){4}(0){8}[01]");
 	}
 }

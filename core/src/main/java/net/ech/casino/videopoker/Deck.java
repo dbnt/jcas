@@ -43,7 +43,7 @@ public class Deck
 
 	private static void unpack(int v, StringBuilder out)
 	{
-		out.append((char) (v >> 16) & 0xffff);
-		out.append((char) v & 0xffff);
+		out.append((char) ((v >> 16) & 0xffff));
+		out.append((char) (v & 0xffff));
 	}
 }
