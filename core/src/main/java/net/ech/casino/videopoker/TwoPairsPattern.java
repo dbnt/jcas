@@ -14,11 +14,7 @@ public class TwoPairsPattern
 
 		for (int r = NUMBER_OF_RANKS; --r >= 0; ) {
 			int rc = handInfo.getRankCount(r);
-			switch (rc + availableWilds) {
-			case 5:
-			case 4:
-			case 3:
-			case 2:
+			if (rc + availableWilds >= 2) {
 				++pairCount;
 				availableWilds -= Math.max(2 - rc, 0);
 			}

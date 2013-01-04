@@ -1,0 +1,11 @@
+TODO
+
+Complete unit testing
+Reference app integration
+Multi-game
+Joker machine
+Deuces wild machine
+Deuces&Joker: Natural 4 deuces
+Analyzer
+Double-up bonus
+Shockwave

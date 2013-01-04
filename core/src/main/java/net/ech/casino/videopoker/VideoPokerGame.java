@@ -20,10 +20,9 @@ public class VideoPokerGame
 	private GameContext gameContext;
 	private VideoPokerState state;
 
-	public VideoPokerGame(GameContext gameContext, VideoPokerState state)
+	public VideoPokerGame(GameContext gameContext)
 	{
 		this.gameContext = gameContext;
-		this.state = state;
 	}
 
 	public void setVideoPokerState(VideoPokerState state)
@@ -44,13 +43,13 @@ public class VideoPokerGame
 	{
 		new VideoPokerMove() {
 			@Override
-			public void execute()
+			protected void execute()
 				throws CasinoException
 			{
 				validatePendingAction(VideoPokerState.Action.DEAL);
 				state.setMachine(machine);
 			}
-		}.execute();
+		}.run();
 	}
 
 	/**
@@ -61,14 +60,14 @@ public class VideoPokerGame
 	{
 		new VideoPokerMove() {
 			@Override
-			public void execute()
+			protected void execute()
 				throws CasinoException
 			{
 				validatePendingAction(VideoPokerState.Action.DEAL);
 				validateCreditValue(creditValue);
 				state.setCreditValue(creditValue);
 			}
-		}.execute();
+		}.run();
 	}
 
 	/**
@@ -79,7 +78,7 @@ public class VideoPokerGame
 	{
 		new VideoPokerMove() {
 			@Override
-			public void execute()
+			protected void execute()
 				throws CasinoException
 			{
 				validatePendingAction(VideoPokerState.Action.DEAL);
@@ -97,7 +96,7 @@ public class VideoPokerGame
 				state.setPendingAction(VideoPokerState.Action.DRAW);
 				transaction.setWagerAmount(state.getCreditValue().multiply(wagerCredits));
 			}
-		}.execute();
+		}.run();
 	}
 
 	/**
@@ -108,7 +107,7 @@ public class VideoPokerGame
 	{
 		new VideoPokerMove() {
 			@Override
-			public void execute()
+			protected void execute()
 				throws CasinoException
 			{
 				validatePendingAction(VideoPokerState.Action.DRAW);
@@ -129,7 +128,7 @@ public class VideoPokerGame
 				transaction.setReturnAmount(state.getCreditValue().multiply(returnCredits));
 				transaction.setWinAmount(state.getCreditValue().multiply(winCredits));
 			}
-		}.execute();
+		}.run();
 	}
 
 	abstract private class VideoPokerMove
@@ -137,14 +136,16 @@ public class VideoPokerGame
 		VideoPokerState state;
 		Transaction transaction;
 
-		public VideoPokerMove()
+		final public void run()
 			throws CasinoException
 		{
 			this.state = copyOrCreateInitialState();
 			this.transaction = new Transaction();
+			execute();
+			commit();
 		}
 
-		abstract public void execute()
+		abstract protected void execute()
 			throws CasinoException;
 
 		protected void validatePendingAction(VideoPokerState.Action expected)

@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class DeckTest
 {
-	Randomizer randomizer = new Randomizer(new NotRandomNumberGenerator());
+	Randomizer randomizer = new NotRandomizer();
 
 	@Test
     public void testShuffleLength ()
@@ -57,20 +57,5 @@ public class DeckTest
 			"2H3H4H5H6H7H8H9HTHJHQHKHAH" +
 			"2S3S4S5S6S7S8S9STSJSQSKSASjojo",
 			cards);
-	}
-
-	public static class NotRandomNumberGenerator
-		extends RandomNumberGenerator
-	{
-		@Override
-		public void setSeed(long seed)
-		{
-		}
-
-		@Override
-		protected int next(int nbits)
-		{
-			return 0;
-		}
 	}
 }

@@ -109,7 +109,7 @@ public class VideoPokerState
 	 * A string of H's and spaces identifying which of the currently displayed
 	 * cards the player held.
 	 */
-	public String holds ()
+	public String getHolds ()
 	{
 		return holds;
 	}

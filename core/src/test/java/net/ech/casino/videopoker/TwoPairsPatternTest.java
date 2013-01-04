@@ -4,7 +4,7 @@ import net.ech.casino.*;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public class FullHousePatternTest
+public class TwoPairsPatternTest
 {
 	@Test
     public void testPositives ()
@@ -14,13 +14,14 @@ public class FullHousePatternTest
 		assertTrue(matches("4C4HAC4DAS"));
 		assertTrue(matches("2C2H3C3D2S"));
 		assertTrue(matches("5D2C5S5H2D"));
+		assertTrue(matches("TDTCQS8HQD"));
 	}
 
 	@Test
     public void testNegatives ()
     {
 		assertFalse(matches("ADACASAHQD"));
-		assertFalse(matches("TDTCQS8HQD"));
+		assertFalse(matches("9DTCQS8HQD"));
 	}
 
 	@Test
@@ -43,7 +44,9 @@ public class FullHousePatternTest
 			"QDTCTSjojo",
 			"jojojoADAS",
 			"2CjojojoAS",
-			"2Cjo2Cjojo"
+			"2Cjo2Cjojo",
+			"jojo2Cjojo",
+			"jojojojojo",
 		};
 		for (String wild : WILD_CASES) {
 			assertTrue(wild, matches(wild));
@@ -52,6 +55,6 @@ public class FullHousePatternTest
 
 	private boolean matches(String hand)
 	{
-		return new FullHousePattern().matches(new HandInfo(hand, new NullCardPattern()));
+		return new TwoPairsPattern().matches(new HandInfo(hand, new NullCardPattern()));
 	}
 }
