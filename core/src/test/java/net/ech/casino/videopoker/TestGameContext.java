@@ -7,6 +7,8 @@ import net.ech.casino.videopoker.machines.DoubleDoubleBonus;
 public class TestGameContext
 	implements GameContext
 {
+	NotRandomizer notRandomizer = new NotRandomizer();
+
 	public <T> T get(Class<T> requestedClass)
 		throws CasinoException
 	{
@@ -19,7 +21,7 @@ public class TestGameContext
 			});
 		}
 		if (Randomizer.class.equals(requestedClass)) {
-			return requestedClass.cast(new NotRandomizer());
+			return requestedClass.cast(notRandomizer);
 		}
 		if (VideoPokerConfig.class.equals(requestedClass)) {
 			return requestedClass.cast(new VideoPokerConfig() {

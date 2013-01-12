@@ -20,9 +20,15 @@ public class Grader
 
 	public static class Grade
 	{
-		public Integer index;
+		public int index = -1;
 		public String label;
 		public Reward reward;
+
+		Grade(int index, String label, Reward reward) {
+			this.index = index;
+			this.label = label;
+			this.reward = reward;
+		}
 	}
 
 	public Grade grade(final String hand, final boolean maxWager)
@@ -41,17 +47,15 @@ public class Grader
 				return getReward(i2.intValue(), maxWager).compareTo(getReward(i1.intValue(), maxWager));
 			}
 		});
-		Grade result = new Grade();
 		if (matchIndexes.size() > 0) {
-			result.index = matchIndexes.get(0);
-			result.label = payTable[result.index.intValue()].getLabel();
-			result.reward = getReward(matchIndexes.get(0), maxWager);
+			int matchIndex = matchIndexes.get(0).intValue();
+			return new Grade(matchIndex, payTable[matchIndex].getLabel(), getReward(matchIndex, maxWager));
 		}
-		return result;
+		return null;
 	}
 
-	private Reward getReward(Integer grade, boolean maxWager)
+	private Reward getReward(int grade, boolean maxWager)
 	{
-		return machine.getPayTable()[grade.intValue()].getReward(maxWager);
+		return machine.getPayTable()[grade].getReward(maxWager);
 	}
 }

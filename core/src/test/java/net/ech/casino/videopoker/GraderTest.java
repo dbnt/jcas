@@ -13,16 +13,14 @@ public class GraderTest
 	public void testLosingHand()
 	{
 		Grader.Grade grade = grader.grade("2CJDQD8S6C", false);
-		assertNull(grade.index);
-		assertNull(grade.label);
-		assertNull(grade.reward);
+		assertNull(grade);
 	}
 
 	@Test
 	public void testWinningHand()
 	{
 		Grader.Grade grade = grader.grade("2CJDJC8S2S", false);
-		assertEquals(11, grade.index.intValue());
+		assertEquals(11, grade.index);
 		assertEquals("TWO PAIR", grade.label);
 		assertNotNull(grade.reward);
 	}
@@ -31,7 +29,7 @@ public class GraderTest
 	public void testBestReward()
 	{
 		Grader.Grade grade = grader.grade("ACADACAS2S", false);
-		assertEquals(1, grade.index.intValue());
+		assertEquals(1, grade.index);
 		assertEquals("FOUR ACES & 2,3,4", grade.label);
 		assertNotNull(grade.reward);
 	}
@@ -40,7 +38,7 @@ public class GraderTest
 	public void testRoyalFlushNotMax()
 	{
 		Grader.Grade grade = grader.grade("ACKCJCQCTC", false);
-		assertEquals(0, grade.index.intValue());
+		assertEquals(0, grade.index);
 		assertEquals("ROYAL FLUSH", grade.label);
 		assertNotNull(grade.reward);
 		VideoPokerState state = new VideoPokerState();
@@ -54,7 +52,7 @@ public class GraderTest
 	public void testRoyalFlushMax()
 	{
 		Grader.Grade grade = grader.grade("ACKCJCQCTC", true);
-		assertEquals(0, grade.index.intValue());
+		assertEquals(0, grade.index);
 		assertEquals("ROYAL FLUSH", grade.label);
 		assertNotNull(grade.reward);
 		VideoPokerState state = new VideoPokerState();

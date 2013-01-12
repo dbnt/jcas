@@ -90,9 +90,7 @@ public class VideoPokerGame
 				state.setCards(cards);
 				state.setHand(hand);
 				state.setHolds(null);
-				Grader.Grade grade = getGrader().grade(hand, isMaximumWager());
-				state.setGradeIndex(grade.index);
-				state.setGradeLabel(grade.label);
+				grade(false);
 				state.setPendingAction(VideoPokerState.Action.DRAW);
 				transaction.setWagerAmount(state.getCreditValue().multiply(wagerCredits));
 			}
@@ -113,15 +111,10 @@ public class VideoPokerGame
 				validatePendingAction(VideoPokerState.Action.DRAW);
 				String newHolds = validateHolds(holds);
 				String newHand = drawCards(newHolds);
-				Grader.Grade grade = getGrader().grade(newHand, isMaximumWager());
 				state.setHand(newHand);
 				state.setHolds(newHolds);
-				state.setGradeIndex(grade.index);
-				state.setGradeLabel(grade.label);
+				grade(true);
 				state.setPendingAction(VideoPokerState.Action.DEAL);
-				if (grade.reward != null) {
-					grade.reward.grant(state);
-				}
 				int winCredits = state.getWinCredits();
 				int returnCredits = Math.max(winCredits - state.getWagerCredits(), 0);
 				winCredits -= returnCredits;
@@ -232,13 +225,22 @@ public class VideoPokerGame
 		return gameContext.get(VideoPokerConfig.class);
 	}
 
+	private void grade(boolean applyWin)
+		throws CasinoException
+	{
+		Grader.Grade grade = new Grader(state.getMachine()).grade(state.getHand(), isMaximumWager());
+		state.setGradeIndex(grade == null ? null : new Integer(grade.index));
+		state.setGradeLabel(grade == null ? null : grade.label);
+		if (applyWin && grade != null && grade.reward != null) {
+			grade.reward.grant(state);
+		}
+	}
+
 	private String dealCards()
 		throws CasinoException
 	{
 		int nJokers = state.getMachine().getNumberOfJokers();
-		Deck deck = new Deck(nJokers);
-		Randomizer randomizer = gameContext.get(Randomizer.class);
-		return deck.shuffleAndDeal(randomizer, CARDS_IN_HAND * 2);
+		return new Deck(nJokers).shuffleAndDeal(gameContext.get(Randomizer.class), CARDS_IN_HAND * 2);
 	}
 
 	private String drawCards(String holds)
@@ -261,10 +263,5 @@ public class VideoPokerGame
 		}
 
 		return buf.toString();
-	}
-
-	private Grader getGrader()
-	{
-		return new Grader(state.getMachine());
 	}
 }

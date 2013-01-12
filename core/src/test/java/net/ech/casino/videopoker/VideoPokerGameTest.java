@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 
 public class VideoPokerGameTest
 {
-	GameContext gameContext;
+	TestGameContext gameContext;
 	VideoPokerGame game;
 
 	@Before
@@ -42,6 +42,16 @@ public class VideoPokerGameTest
 	}
 
 	@Test
+	public void testHand() throws Exception
+	{
+		assertNull(game.getVideoPokerState());
+		game.wagerAndDeal(1);
+		assertEquals(10, game.getVideoPokerState().getHand().length());
+		game.draw("");
+		assertEquals(10, game.getVideoPokerState().getHand().length());
+	}
+
+	@Test
     public void testDealAndDraw() throws Exception
     {
 		game.wagerAndDeal(5);
@@ -52,26 +62,61 @@ public class VideoPokerGameTest
 	}
 
 	@Test
-    public void testWin() throws Exception
-    {
+	public void testLoss() throws Exception
+	{
+		gameContext.notRandomizer.enqueue(0);
+		gameContext.notRandomizer.enqueue(14);
+		gameContext.notRandomizer.enqueue(27);
+		gameContext.notRandomizer.enqueue(39);
+		gameContext.notRandomizer.enqueue(7);
 		game.wagerAndDeal(1);
-		assertEquals(0, game.getVideoPokerState().getWinCredits());
-		assertNotNull(game.getVideoPokerState().getGradeIndex());
+		assertEquals("", game.getVideoPokerState().getHand());
 		game.draw("HHHHH");
-		assertNotNull(game.getVideoPokerState().getMachine());
-		assertEquals(50, game.getVideoPokerState().getWinCredits());
+		assertEquals(0, game.getVideoPokerState().getWinCredits());
+		assertNull(game.getVideoPokerState().getGradeIndex());
 	}
 
 	@Test
-    public void testWinMax() throws Exception
+    public void testWin() throws Exception
+    {
+		game.wagerAndDeal(1);
+		assertEquals("", game.getVideoPokerState().getHand());
+		assertEquals(0, game.getVideoPokerState().getWinCredits());
+		assertNotNull(game.getVideoPokerState().getGradeIndex());
+		game.draw("HHHHH");
+		assertEquals("STRAIGHT FLUSH", game.getVideoPokerState().getGradeLabel());
+		assertEquals(50, game.getVideoPokerState().getWinCredits());
+		assertEquals(new Integer(4), game.getVideoPokerState().getGradeIndex());
+	}
+
+	@Test
+    public void testWinMax1() throws Exception
     {
 		game.wagerAndDeal(5);
+		assertEquals("", game.getVideoPokerState().getHand());
+		assertEquals(0, game.getVideoPokerState().getWinCredits());
+		assertNotNull(game.getVideoPokerState().getGradeIndex());
+		game.draw("HHHHH");
+		assertEquals("STRAIGHT FLUSH", game.getVideoPokerState().getGradeLabel());
+		assertEquals(250, game.getVideoPokerState().getWinCredits());
+		assertEquals(new Integer(4), game.getVideoPokerState().getGradeIndex());
+	}
+
+	@Test
+    public void testWinMax2() throws Exception
+    {
+		gameContext.notRandomizer.enqueue(8);
+		gameContext.notRandomizer.enqueue(8);
+		gameContext.notRandomizer.enqueue(8);
+		gameContext.notRandomizer.enqueue(8);
+		gameContext.notRandomizer.enqueue(8);
+		game.wagerAndDeal(5);
+		assertEquals("", game.getVideoPokerState().getHand());
 		assertEquals(0, game.getVideoPokerState().getWinCredits());
 		game.draw("HHHHH");
-		assertNotNull(game.getVideoPokerState().getMachine());
-		assertEquals(250, game.getVideoPokerState().getWinCredits());
-		assertEquals("STRAIGHT FLUSH", game.getVideoPokerState().getGradeLabel());
-		assertEquals(new Integer(4), game.getVideoPokerState().getGradeIndex());
+		assertEquals("ROYAL FLUSH", game.getVideoPokerState().getGradeLabel());
+		assertEquals(2000, game.getVideoPokerState().getWinCredits());
+		assertEquals(new Integer(0), game.getVideoPokerState().getGradeIndex());
 	}
 
 	@Test
